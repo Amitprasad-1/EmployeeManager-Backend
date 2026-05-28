@@ -149,31 +149,86 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
-            <div class="form-group">
-              <label for="name">Full Name</label>
-              <input type="text" class="form-control" id="name" name="name" [(ngModel)]="newEmployee.name" placeholder="e.g. John Doe" required>
+          <!-- Cropper Body & Footer Group -->
+          <div *ngIf="cropImageSrc && croppingMode === 'add'">
+            <div class="modal-body">
+              <div class="cropper-panel">
+                <div #cropperContainerAdd class="cropper-container"
+                     (mousedown)="startDrag($event)"
+                     (mousemove)="drag($event)"
+                     (mouseup)="endDrag()"
+                     (mouseleave)="endDrag()"
+                     (touchstart)="startDrag($event)"
+                     (touchmove)="drag($event)"
+                     (touchend)="endDrag()">
+                  <img #cropperImgAdd [src]="cropImageSrc" class="cropper-image"
+                       [style.transform]="'translate(' + panX + 'px, ' + panY + 'px) scale(' + zoom + ')'"
+                       (load)="onImageLoaded(cropperImgAdd, cropperContainerAdd)" />
+                  <div class="cropper-crop-box"></div>
+                </div>
+                <div class="cropper-controls">
+                  <div class="zoom-control-group">
+                    <i class="fa fa-minus"></i>
+                    <input type="range" class="zoom-slider" min="1" max="4" step="0.05" [(ngModel)]="zoom" name="zoomSliderAdd" />
+                    <i class="fa fa-plus"></i>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="jobTitle">Job Title</label>
-              <input type="text" class="form-control" id="jobTitle" name="jobTitle" [(ngModel)]="newEmployee.jobTitle" placeholder="e.g. Software Engineer" required>
-            </div>
-            <div class="form-group">
-              <label for="email">Email Address</label>
-              <input type="email" class="form-control" id="email" name="email" [(ngModel)]="newEmployee.email" placeholder="e.g. john.doe@company.com" required>
-            </div>
-            <div class="form-group">
-              <label for="phone">Phone Number</label>
-              <input type="text" class="form-control" id="phone" name="phone" [(ngModel)]="newEmployee.phone" placeholder="e.g. +1 555-0199" required>
-            </div>
-            <div class="form-group">
-              <label for="imageUrl">Profile Image URL</label>
-              <input type="text" class="form-control" id="imageUrl" name="imageUrl" [(ngModel)]="newEmployee.imageUrl" placeholder="https://example.com/avatar.jpg">
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="cancelCrop()">Cancel</button>
+              <button type="button" class="btn btn-success" (click)="applyCrop(cropperImgAdd, cropperContainerAdd)">Crop & Save</button>
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" id="add-employee-close" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button [disabled]="addForm.invalid" type="submit" class="btn btn-success">Add Employee</button>
+
+          <!-- Regular Form Body & Footer Group -->
+          <div *ngIf="!(cropImageSrc && croppingMode === 'add')">
+            <div class="modal-body">
+              <div class="avatar-upload-container">
+                <div class="avatar-uploader-circle" (click)="fileInputAdd.click()">
+                  <img [src]="newEmployee.imageUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80'" class="avatar-uploader-img" />
+                  <div class="avatar-uploader-overlay">
+                    <i class="fa fa-camera"></i>
+                    <span>Upload Photo</span>
+                  </div>
+                </div>
+                <input #fileInputAdd type="file" (change)="onFileSelected($event, 'add')" accept="image/*" class="d-none" />
+                <div class="mt-2 text-center">
+                  <button type="button" class="btn btn-link btn-sm text-muted p-0 mr-3" *ngIf="newEmployee.imageUrl" (click)="newEmployee.imageUrl = ''">
+                    Clear Photo
+                  </button>
+                  <button type="button" class="btn btn-link btn-sm text-muted p-0" (click)="showUrlInputAdd = !showUrlInputAdd">
+                    {{ showUrlInputAdd ? 'Use Upload instead' : 'Or enter image URL' }}
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group" *ngIf="showUrlInputAdd">
+                <label for="imageUrl">Profile Image URL</label>
+                <input type="text" class="form-control" id="imageUrl" name="imageUrl" [(ngModel)]="newEmployee.imageUrl" placeholder="https://example.com/avatar.jpg">
+              </div>
+
+              <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" class="form-control" id="name" name="name" [(ngModel)]="newEmployee.name" placeholder="e.g. John Doe" required>
+              </div>
+              <div class="form-group">
+                <label for="jobTitle">Job Title</label>
+                <input type="text" class="form-control" id="jobTitle" name="jobTitle" [(ngModel)]="newEmployee.jobTitle" placeholder="e.g. Software Engineer" required>
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" class="form-control" id="email" name="email" [(ngModel)]="newEmployee.email" placeholder="e.g. john.doe@company.com" required>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="text" class="form-control" id="phone" name="phone" [(ngModel)]="newEmployee.phone" placeholder="e.g. +1 555-0199" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="add-employee-close" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button [disabled]="addForm.invalid" type="submit" class="btn btn-success">Add Employee</button>
+            </div>
           </div>
         </form>
       </div>
@@ -191,31 +246,86 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
-            <div class="form-group">
-              <label for="editName">Full Name</label>
-              <input type="text" class="form-control" id="editName" name="name" [(ngModel)]="editEmployee.name" required>
+          <!-- Cropper Body & Footer Group -->
+          <div *ngIf="cropImageSrc && croppingMode === 'edit'">
+            <div class="modal-body">
+              <div class="cropper-panel">
+                <div #cropperContainerEdit class="cropper-container"
+                     (mousedown)="startDrag($event)"
+                     (mousemove)="drag($event)"
+                     (mouseup)="endDrag()"
+                     (mouseleave)="endDrag()"
+                     (touchstart)="startDrag($event)"
+                     (touchmove)="drag($event)"
+                     (touchend)="endDrag()">
+                  <img #cropperImgEdit [src]="cropImageSrc" class="cropper-image"
+                       [style.transform]="'translate(' + panX + 'px, ' + panY + 'px) scale(' + zoom + ')'"
+                       (load)="onImageLoaded(cropperImgEdit, cropperContainerEdit)" />
+                  <div class="cropper-crop-box"></div>
+                </div>
+                <div class="cropper-controls">
+                  <div class="zoom-control-group">
+                    <i class="fa fa-minus"></i>
+                    <input type="range" class="zoom-slider" min="1" max="4" step="0.05" [(ngModel)]="zoom" name="zoomSliderEdit" />
+                    <i class="fa fa-plus"></i>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="editJobTitle">Job Title</label>
-              <input type="text" class="form-control" id="editJobTitle" name="jobTitle" [(ngModel)]="editEmployee.jobTitle" required>
-            </div>
-            <div class="form-group">
-              <label for="editEmail">Email Address</label>
-              <input type="email" class="form-control" id="editEmail" name="email" [(ngModel)]="editEmployee.email" required>
-            </div>
-            <div class="form-group">
-              <label for="editPhone">Phone Number</label>
-              <input type="text" class="form-control" id="editPhone" name="phone" [(ngModel)]="editEmployee.phone" required>
-            </div>
-            <div class="form-group">
-              <label for="editImageUrl">Profile Image URL</label>
-              <input type="text" class="form-control" id="editImageUrl" name="imageUrl" [(ngModel)]="editEmployee.imageUrl">
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="cancelCrop()">Cancel</button>
+              <button type="button" class="btn btn-success" (click)="applyCrop(cropperImgEdit, cropperContainerEdit)">Crop & Save</button>
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" id="update-employee-close" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary">Update Details</button>
+
+          <!-- Regular Form Body & Footer Group -->
+          <div *ngIf="!(cropImageSrc && croppingMode === 'edit')">
+            <div class="modal-body">
+              <div class="avatar-upload-container">
+                <div class="avatar-uploader-circle" (click)="fileInputEdit.click()">
+                  <img [src]="editEmployee.imageUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80'" class="avatar-uploader-img" />
+                  <div class="avatar-uploader-overlay">
+                    <i class="fa fa-camera"></i>
+                    <span>Upload Photo</span>
+                  </div>
+                </div>
+                <input #fileInputEdit type="file" (change)="onFileSelected($event, 'edit')" accept="image/*" class="d-none" />
+                <div class="mt-2 text-center">
+                  <button type="button" class="btn btn-link btn-sm text-muted p-0 mr-3" *ngIf="editEmployee.imageUrl" (click)="editEmployee.imageUrl = ''">
+                    Clear Photo
+                  </button>
+                  <button type="button" class="btn btn-link btn-sm text-muted p-0" (click)="showUrlInputEdit = !showUrlInputEdit">
+                    {{ showUrlInputEdit ? 'Use Upload instead' : 'Or enter image URL' }}
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group" *ngIf="showUrlInputEdit">
+                <label for="editImageUrl">Profile Image URL</label>
+                <input type="text" class="form-control" id="editImageUrl" name="imageUrl" [(ngModel)]="editEmployee.imageUrl">
+              </div>
+
+              <div class="form-group">
+                <label for="editName">Full Name</label>
+                <input type="text" class="form-control" id="editName" name="name" [(ngModel)]="editEmployee.name" required>
+              </div>
+              <div class="form-group">
+                <label for="editJobTitle">Job Title</label>
+                <input type="text" class="form-control" id="editJobTitle" name="jobTitle" [(ngModel)]="editEmployee.jobTitle" required>
+              </div>
+              <div class="form-group">
+                <label for="editEmail">Email Address</label>
+                <input type="email" class="form-control" id="editEmail" name="email" [(ngModel)]="editEmployee.email" required>
+              </div>
+              <div class="form-group">
+                <label for="editPhone">Phone Number</label>
+                <input type="text" class="form-control" id="editPhone" name="phone" [(ngModel)]="editEmployee.phone" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="update-employee-close" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Update Details</button>
+            </div>
           </div>
         </form>
       </div>

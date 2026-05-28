@@ -21,6 +21,18 @@ export class AppComponent implements OnInit {
   public searchKey: string = '';
   public isDarkTheme: boolean = false;
   
+  // Upload and Cropping state
+  public showUrlInputAdd: boolean = false;
+  public showUrlInputEdit: boolean = false;
+  public cropImageSrc: string | null = null;
+  public croppingMode: 'add' | 'edit' | null = null;
+  public zoom: number = 1;
+  public panX: number = 0;
+  public panY: number = 0;
+  private isDragging = false;
+  private startX = 0;
+  private startY = 0;
+
   // Dashboard statistics fields
   public totalEmployeesCount: number = 0;
   public totalJobTitlesCount: number = 0;
@@ -152,9 +164,13 @@ export class AppComponent implements OnInit {
     button.setAttribute('data-toggle', 'modal');
 
     if (mode === 'add') {
+      this.cancelCrop();
+      this.showUrlInputAdd = false;
       this.newEmployee = {} as Employee;
       button.setAttribute('data-target', '#addEmployeeModal');
     } else if (mode === 'edit') {
+      this.cancelCrop();
+      this.showUrlInputEdit = false;
       this.editEmployee = { ...employee! };
       button.setAttribute('data-target', '#updateEmployeeModal');
     } else if (mode === 'delete') {
@@ -164,5 +180,120 @@ export class AppComponent implements OnInit {
 
     container?.appendChild(button);
     button.click();
+  }
+
+  // File selection event handler
+  public onFileSelected(event: Event, mode: 'add' | 'edit'): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.cropImageSrc = reader.result as string;
+        this.croppingMode = mode;
+        this.zoom = 1;
+        this.panX = 0;
+        this.panY = 0;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Centering & scaling image when loaded
+  public onImageLoaded(img: HTMLImageElement, container: HTMLDivElement): void {
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+    const imgWidth = img.naturalWidth;
+    const imgHeight = img.naturalHeight;
+
+    // Minimum zoom to cover the 180px crop box
+    const scaleX = 180 / imgWidth;
+    const scaleY = 180 / imgHeight;
+    const minZoom = Math.max(scaleX, scaleY);
+    this.zoom = Math.max(minZoom, 1);
+
+    // Initial center position
+    this.panX = (containerWidth - imgWidth) / 2;
+    this.panY = (containerHeight - imgHeight) / 2;
+  }
+
+  // Drag handlers
+  public startDrag(event: MouseEvent | TouchEvent): void {
+    this.isDragging = true;
+    const clientX = event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
+    const clientY = event instanceof MouseEvent ? event.clientY : event.touches[0].clientY;
+    this.startX = clientX - this.panX;
+    this.startY = clientY - this.panY;
+  }
+
+  public drag(event: MouseEvent | TouchEvent): void {
+    if (!this.isDragging) return;
+    event.preventDefault();
+    const clientX = event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
+    const clientY = event instanceof MouseEvent ? event.clientY : event.touches[0].clientY;
+    this.panX = clientX - this.startX;
+    this.panY = clientY - this.startY;
+  }
+
+  public endDrag(): void {
+    this.isDragging = false;
+  }
+
+  public cancelCrop(): void {
+    this.cropImageSrc = null;
+    this.croppingMode = null;
+  }
+
+  // Crop image using canvas drawImage
+  public applyCrop(img: HTMLImageElement, container: HTMLDivElement): void {
+    const containerRect = container.getBoundingClientRect();
+    const imgRect = img.getBoundingClientRect();
+
+    const cropBoxWidth = 180;
+    const cropBoxHeight = 180;
+    const cropBoxLeft = containerRect.left + (containerRect.width - cropBoxWidth) / 2;
+    const cropBoxTop = containerRect.top + (containerRect.height - cropBoxHeight) / 2;
+
+    // Relative offset to scaled screen image
+    const cropX = cropBoxLeft - imgRect.left;
+    const cropY = cropBoxTop - imgRect.top;
+
+    // Scale mapping factor
+    const scaleFactor = img.naturalWidth / imgRect.width;
+
+    const sourceX = cropX * scaleFactor;
+    const sourceY = cropY * scaleFactor;
+    const sourceWidth = cropBoxWidth * scaleFactor;
+    const sourceHeight = cropBoxHeight * scaleFactor;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 180;
+    canvas.height = 180;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      // Background fill to ensure clean edges
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 180, 180);
+      ctx.drawImage(
+        img,
+        sourceX,
+        sourceY,
+        sourceWidth,
+        sourceHeight,
+        0,
+        0,
+        180,
+        180
+      );
+      
+      const croppedBase64 = canvas.toDataURL('image/jpeg', 0.85);
+      
+      if (this.croppingMode === 'add') {
+        this.newEmployee.imageUrl = croppedBase64;
+      } else if (this.croppingMode === 'edit') {
+        this.editEmployee.imageUrl = croppedBase64;
+      }
+    }
+    this.cancelCrop();
   }
 }

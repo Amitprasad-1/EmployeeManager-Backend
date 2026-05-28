@@ -459,3 +459,147 @@ body.dark-theme .search-group:focus-within {
 .btn-search-round i {
   font-size: 0.85rem;
 }
+
+/* Custom Profile Picture Upload area */
+.avatar-upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.avatar-uploader-circle {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  border: 3px dashed var(--input-border);
+  background-color: var(--input-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.avatar-uploader-circle:hover {
+  border-color: rgb(var(--primary-rgb));
+  box-shadow: 0 0 15px rgba(var(--primary-rgb), 0.15);
+}
+body.dark-theme .avatar-uploader-circle:hover {
+  border-color: rgb(var(--accent-rgb));
+  box-shadow: 0 0 15px rgba(var(--accent-rgb), 0.15);
+}
+.avatar-uploader-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.avatar-uploader-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  font-size: 0.8rem;
+  font-weight: 600;
+  gap: 4px;
+}
+.avatar-uploader-circle:hover .avatar-uploader-overlay {
+  opacity: 1;
+}
+.avatar-uploader-overlay i {
+  font-size: 1.2rem;
+}
+
+/* Crop Panel inside Modal */
+.cropper-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0;
+}
+.cropper-container {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  background-color: #0d1117;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: move;
+  touch-action: none;
+  border: 1px solid var(--card-border);
+}
+.cropper-image {
+  position: absolute;
+  max-width: none;
+  max-height: none;
+  transform-origin: center center;
+  will-change: transform;
+}
+.cropper-crop-box {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 180px; height: 180px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 0 9999px rgba(10, 15, 30, 0.7);
+  pointer-events: none;
+}
+.cropper-controls {
+  width: 100%;
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.zoom-control-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-color);
+  font-size: 0.9rem;
+  justify-content: center;
+}
+.zoom-slider {
+  width: 220px;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--input-border);
+  outline: none;
+  transition: background 0.3s;
+}
+.zoom-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgb(var(--primary-rgb));
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(var(--primary-rgb), 0.3);
+  transition: transform 0.1s;
+}
+body.dark-theme .zoom-slider::-webkit-slider-thumb {
+  background: rgb(var(--accent-rgb));
+  box-shadow: 0 2px 6px rgba(var(--accent-rgb), 0.3);
+}
+.zoom-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+.cropper-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+

@@ -20,7 +20,12 @@ export class AppComponent implements OnInit {
   public selectedEmployee: Employee = {} as Employee;
   public searchKey: string = '';
   public isDarkTheme: boolean = false;
+  public isLoading: boolean = true;
   
+  // Toast notifications state
+  public toasts: Array<{ id: number; message: string; type: 'success' | 'error' | 'info' }> = [];
+  private toastIdCounter = 0;
+
   // Upload and Cropping state
   public showUrlInputAdd: boolean = false;
   public showUrlInputEdit: boolean = false;
@@ -47,16 +52,33 @@ export class AppComponent implements OnInit {
     this.loadTheme(); // Load theme preference on page load
   }
 
+  // Show toast notification
+  public showToast(message: string, type: 'success' | 'error' | 'info' = 'success'): void {
+    const id = this.toastIdCounter++;
+    this.toasts.push({ id, message, type });
+    setTimeout(() => {
+      this.removeToast(id);
+    }, 4000);
+  }
+
+  // Remove toast notification
+  public removeToast(id: number): void {
+    this.toasts = this.toasts.filter(t => t.id !== id);
+  }
+
   // Fetch all employees
   public getEmployees(): void {
+    this.isLoading = true;
     this.employeeService.getEmployee().subscribe({
       next: (response: Employee[]) => {
         this.employees = response;
         this.allEmployees = response; // backup list for search
         this.calculateStats();
+        this.isLoading = false;
       },
       error: (error: HttpErrorResponse) => {
-        alert(error.message);
+        this.showToast('Failed to load team members.', 'error');
+        this.isLoading = false;
       }
     });
   }
@@ -83,9 +105,10 @@ export class AppComponent implements OnInit {
         this.getEmployees();
         addForm.reset();
         this.newEmployee = {} as Employee;
+        this.showToast('Employee added successfully!', 'success');
       },
       error: (error: HttpErrorResponse) => {
-        alert(error.message);
+        this.showToast('Failed to add employee: ' + error.message, 'error');
         addForm.reset();
         this.newEmployee = {} as Employee;
       }
@@ -99,9 +122,10 @@ export class AppComponent implements OnInit {
         console.log(response);
         document.getElementById('update-employee-close')?.click();
         this.getEmployees();
+        this.showToast('Employee details updated successfully!', 'success');
       },
       error: (error: HttpErrorResponse) => {
-        alert(error.message);
+        this.showToast('Failed to update employee details.', 'error');
       }
     });
   }
@@ -113,9 +137,10 @@ export class AppComponent implements OnInit {
         console.log('Deleted successfully');
         document.getElementById('delete-employee-close')?.click();
         this.getEmployees();
+        this.showToast('Employee deleted successfully.', 'success');
       },
       error: (error: HttpErrorResponse) => {
-        alert(error.message);
+        this.showToast('Failed to delete employee.', 'error');
       }
     });
   }

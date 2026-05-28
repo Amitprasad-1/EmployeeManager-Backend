@@ -91,47 +91,72 @@
     </div>
   </div>
 
-  <div *ngIf="employees.length > 0; else noEmployees">
+  <!-- Loading Skeletons -->
+  <div *ngIf="isLoading">
     <div class="row justify-content-center gx-4 gy-4">
-      <div *ngFor="let employee of employees" class="col-sm-10 col-md-6 col-lg-4 col-xl-3 d-flex justify-content-center">
-        <!-- Modern Profile Card -->
-        <div class="card glass employee-card">
-          <!-- Card Banner Header -->
-          <div class="card-banner"></div>
-          
-          <!-- Overlapping Avatar -->
+      <div *ngFor="let item of [1, 2, 3, 4]" class="col-sm-10 col-md-6 col-lg-4 col-xl-3 d-flex justify-content-center">
+        <div class="card glass employee-card skeleton-card">
+          <div class="card-banner skeleton-shimmer"></div>
           <div class="avatar-container">
-            <img [src]="employee?.imageUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80'" 
-              alt="Profile" 
-              class="profile-avatar" />
+            <div class="profile-avatar skeleton-shimmer"></div>
           </div>
-          
-          <!-- Profile Info Details -->
           <div class="profile-info">
-            <h5 class="text-break">{{ employee?.name }}</h5>
-            <span class="job-badge">{{ employee?.jobTitle }}</span>
+            <div class="skeleton-text skeleton-title skeleton-shimmer"></div>
+            <div class="skeleton-text skeleton-badge skeleton-shimmer"></div>
           </div>
-
-          <!-- Contact info list -->
-          <div class="contact-details">
-            <div class="detail-item text-break">
-              <i class="fa fa-envelope detail-icon"></i>
-              <span class="text-muted">{{ employee?.email }}</span>
-            </div>
-            <div class="detail-item">
-              <i class="fa fa-phone detail-icon"></i>
-              <span class="text-muted">{{ employee?.phone }}</span>
-            </div>
+          <div class="contact-details" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="skeleton-text skeleton-line skeleton-shimmer" style="width: 80%; height: 10px; margin-bottom: 8px;"></div>
+            <div class="skeleton-text skeleton-line skeleton-shimmer" style="width: 60%; height: 10px; margin-bottom: 0;"></div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-          <!-- Buttons Actions -->
-          <div class="card-actions">
-            <button (click)="onOpenModal(employee,'edit')" class="action-btn edit-btn" title="Edit Employee">
-              <i class="fa fa-pencil"></i>
-            </button>
-            <button (click)="onOpenModal(employee,'delete')" class="action-btn delete-btn" title="Delete Employee">
-              <i class="fa fa-trash"></i>
-            </button>
+  <!-- Real Employee Content -->
+  <div *ngIf="!isLoading">
+    <div *ngIf="employees.length > 0; else noEmployees">
+      <div class="row justify-content-center gx-4 gy-4">
+        <div *ngFor="let employee of employees" class="col-sm-10 col-md-6 col-lg-4 col-xl-3 d-flex justify-content-center">
+          <!-- Modern Profile Card -->
+          <div class="card glass employee-card">
+            <!-- Card Banner Header -->
+            <div class="card-banner"></div>
+            
+            <!-- Overlapping Avatar -->
+            <div class="avatar-container">
+              <img [src]="employee?.imageUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80'" 
+                alt="Profile" 
+                class="profile-avatar" />
+            </div>
+            
+            <!-- Profile Info Details -->
+            <div class="profile-info">
+              <h5 class="text-break">{{ employee?.name }}</h5>
+              <span class="job-badge">{{ employee?.jobTitle }}</span>
+            </div>
+
+            <!-- Contact info list -->
+            <div class="contact-details">
+              <div class="detail-item text-break">
+                <i class="fa fa-envelope detail-icon"></i>
+                <span class="text-muted">{{ employee?.email }}</span>
+              </div>
+              <div class="detail-item">
+                <i class="fa fa-phone detail-icon"></i>
+                <span class="text-muted">{{ employee?.phone }}</span>
+              </div>
+            </div>
+
+            <!-- Buttons Actions -->
+            <div class="card-actions">
+              <button (click)="onOpenModal(employee,'edit')" class="action-btn edit-btn" title="Edit Employee">
+                <i class="fa fa-pencil"></i>
+              </button>
+              <button (click)="onOpenModal(employee,'delete')" class="action-btn delete-btn" title="Delete Employee">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -210,19 +235,31 @@
 
               <div class="form-group">
                 <label for="name">Full Name</label>
-                <input type="text" class="form-control" id="name" name="name" [(ngModel)]="newEmployee.name" placeholder="e.g. John Doe" required>
+                <input type="text" class="form-control" id="name" name="name" [(ngModel)]="newEmployee.name" #nameAdd="ngModel" placeholder="e.g. John Doe" required>
+                <div *ngIf="nameAdd.invalid && (nameAdd.dirty || nameAdd.touched)" class="validation-error">
+                  <i class="fa fa-exclamation-circle"></i> Full Name is required.
+                </div>
               </div>
               <div class="form-group">
                 <label for="jobTitle">Job Title</label>
-                <input type="text" class="form-control" id="jobTitle" name="jobTitle" [(ngModel)]="newEmployee.jobTitle" placeholder="e.g. Software Engineer" required>
+                <input type="text" class="form-control" id="jobTitle" name="jobTitle" [(ngModel)]="newEmployee.jobTitle" #jobAdd="ngModel" placeholder="e.g. Software Engineer" required>
+                <div *ngIf="jobAdd.invalid && (jobAdd.dirty || jobAdd.touched)" class="validation-error">
+                  <i class="fa fa-exclamation-circle"></i> Job Title is required.
+                </div>
               </div>
               <div class="form-group">
                 <label for="email">Email Address</label>
-                <input type="email" class="form-control" id="email" name="email" [(ngModel)]="newEmployee.email" placeholder="e.g. john.doe@company.com" required>
+                <input type="email" class="form-control" id="email" name="email" [(ngModel)]="newEmployee.email" #emailAdd="ngModel" placeholder="e.g. john.doe@company.com" email required>
+                <div *ngIf="emailAdd.invalid && (emailAdd.dirty || emailAdd.touched)" class="validation-error">
+                  <i class="fa fa-exclamation-circle"></i> Please enter a valid email address.
+                </div>
               </div>
               <div class="form-group">
                 <label for="phone">Phone Number</label>
-                <input type="text" class="form-control" id="phone" name="phone" [(ngModel)]="newEmployee.phone" placeholder="e.g. +1 555-0199" required>
+                <input type="text" class="form-control" id="phone" name="phone" [(ngModel)]="newEmployee.phone" #phoneAdd="ngModel" placeholder="e.g. +1 555-0199" required>
+                <div *ngIf="phoneAdd.invalid && (phoneAdd.dirty || phoneAdd.touched)" class="validation-error">
+                  <i class="fa fa-exclamation-circle"></i> Phone Number is required.
+                </div>
               </div>
             </div>
             <div class="modal-footer">
@@ -307,24 +344,36 @@
 
               <div class="form-group">
                 <label for="editName">Full Name</label>
-                <input type="text" class="form-control" id="editName" name="name" [(ngModel)]="editEmployee.name" required>
+                <input type="text" class="form-control" id="editName" name="name" [(ngModel)]="editEmployee.name" #nameEdit="ngModel" required>
+                <div *ngIf="nameEdit.invalid && (nameEdit.dirty || nameEdit.touched)" class="validation-error">
+                  <i class="fa fa-exclamation-circle"></i> Full Name is required.
+                </div>
               </div>
               <div class="form-group">
                 <label for="editJobTitle">Job Title</label>
-                <input type="text" class="form-control" id="editJobTitle" name="jobTitle" [(ngModel)]="editEmployee.jobTitle" required>
+                <input type="text" class="form-control" id="editJobTitle" name="jobTitle" [(ngModel)]="editEmployee.jobTitle" #jobEdit="ngModel" required>
+                <div *ngIf="jobEdit.invalid && (jobEdit.dirty || jobEdit.touched)" class="validation-error">
+                  <i class="fa fa-exclamation-circle"></i> Job Title is required.
+                </div>
               </div>
               <div class="form-group">
                 <label for="editEmail">Email Address</label>
-                <input type="email" class="form-control" id="editEmail" name="email" [(ngModel)]="editEmployee.email" required>
+                <input type="email" class="form-control" id="editEmail" name="email" [(ngModel)]="editEmployee.email" #emailEdit="ngModel" email required>
+                <div *ngIf="emailEdit.invalid && (emailEdit.dirty || emailEdit.touched)" class="validation-error">
+                  <i class="fa fa-exclamation-circle"></i> Please enter a valid email address.
+                </div>
               </div>
               <div class="form-group">
                 <label for="editPhone">Phone Number</label>
-                <input type="text" class="form-control" id="editPhone" name="phone" [(ngModel)]="editEmployee.phone" required>
+                <input type="text" class="form-control" id="editPhone" name="phone" [(ngModel)]="editEmployee.phone" #phoneEdit="ngModel" required>
+                <div *ngIf="phoneEdit.invalid && (phoneEdit.dirty || phoneEdit.touched)" class="validation-error">
+                  <i class="fa fa-exclamation-circle"></i> Phone Number is required.
+                </div>
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" id="update-employee-close" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary">Update Details</button>
+              <button [disabled]="editForm.invalid" type="submit" class="btn btn-primary">Update Details</button>
             </div>
           </div>
         </form>
@@ -368,4 +417,17 @@
       </button>
     </div>
   </ng-template>
+
+  <!-- Toasts Notification Container -->
+  <div class="toast-container">
+    <div *ngFor="let toast of toasts" class="toast-notification glass {{ toast.type }}">
+      <i class="fa mr-2" [ngClass]="{
+        'fa-check-circle text-success': toast.type === 'success',
+        'fa-times-circle text-danger': toast.type === 'error',
+        'fa-info-circle text-info': toast.type === 'info'
+      }"></i>
+      <span>{{ toast.message }}</span>
+      <button type="button" class="toast-close" (click)="removeToast(toast.id)">&times;</button>
+    </div>
+  </div>
 </div>

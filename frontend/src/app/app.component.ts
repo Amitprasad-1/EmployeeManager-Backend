@@ -259,36 +259,25 @@ export class AppComponent implements OnInit {
     const cropBoxLeft = containerRect.left + (containerRect.width - cropBoxWidth) / 2;
     const cropBoxTop = containerRect.top + (containerRect.height - cropBoxHeight) / 2;
 
-    // Relative offset to scaled screen image
-    const cropX = cropBoxLeft - imgRect.left;
-    const cropY = cropBoxTop - imgRect.top;
-
-    // Scale mapping factor
-    const scaleFactor = img.naturalWidth / imgRect.width;
-
-    const sourceX = cropX * scaleFactor;
-    const sourceY = cropY * scaleFactor;
-    const sourceWidth = cropBoxWidth * scaleFactor;
-    const sourceHeight = cropBoxHeight * scaleFactor;
-
     const canvas = document.createElement('canvas');
     canvas.width = 180;
     canvas.height = 180;
     const ctx = canvas.getContext('2d');
     if (ctx) {
-      // Background fill to ensure clean edges
+      // Background fill to ensure clean edges under transparent areas
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, 180, 180);
+
+      // Calculate relative drawing offset from crop box top-left
+      const drawX = imgRect.left - cropBoxLeft;
+      const drawY = imgRect.top - cropBoxTop;
+
       ctx.drawImage(
         img,
-        sourceX,
-        sourceY,
-        sourceWidth,
-        sourceHeight,
-        0,
-        0,
-        180,
-        180
+        drawX,
+        drawY,
+        imgRect.width,
+        imgRect.height
       );
       
       const croppedBase64 = canvas.toDataURL('image/jpeg', 0.85);

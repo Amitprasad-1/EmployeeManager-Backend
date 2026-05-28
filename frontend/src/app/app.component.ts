@@ -20,6 +20,11 @@ export class AppComponent implements OnInit {
   public selectedEmployee: Employee = {} as Employee;
   public searchKey: string = '';
   public isDarkTheme: boolean = false;
+  
+  // Dashboard statistics fields
+  public totalEmployeesCount: number = 0;
+  public totalJobTitlesCount: number = 0;
+  public activeContractsCount: number = 0;
 
   constructor(private employeeService: EmployeeService) {}
 
@@ -34,11 +39,25 @@ export class AppComponent implements OnInit {
       next: (response: Employee[]) => {
         this.employees = response;
         this.allEmployees = response; // backup list for search
+        this.calculateStats();
       },
       error: (error: HttpErrorResponse) => {
         alert(error.message);
       }
     });
+  }
+
+  private calculateStats(): void {
+    this.totalEmployeesCount = this.allEmployees.length;
+    
+    const uniqueTitles = new Set(
+      this.allEmployees
+        .filter(e => e.jobTitle)
+        .map(e => e.jobTitle.trim().toLowerCase())
+    );
+    this.totalJobTitlesCount = uniqueTitles.size;
+    
+    this.activeContractsCount = this.allEmployees.filter(e => e.phone && e.email).length;
   }
 
   // Add new employee

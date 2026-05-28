@@ -424,6 +424,7 @@ body.dark-theme .search-group:focus-within {
 }
 .search-input {
   border: none !important;
+  outline: none !important;
   background: transparent !important;
   box-shadow: none !important;
   padding: 0.4rem 0.8rem !important;
@@ -433,6 +434,12 @@ body.dark-theme .search-group:focus-within {
   font-size: 0.9rem;
   width: 190px;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.search-input:focus,
+.search-input:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 .search-group:focus-within .search-input {
   width: 250px;

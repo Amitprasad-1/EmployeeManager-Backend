@@ -6,8 +6,8 @@
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">
+  <div class="container-fluid align-items-center">
+    <a class="navbar-brand d-flex align-items-center" href="#">
       <i class="fa fa-users mr-2"></i>Employee Manager
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
@@ -15,26 +15,26 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     
-    <div class="collapse navbar-collapse" id="navbarContent">
-      <ul class="navbar-nav mr-auto">
+    <div class="collapse navbar-collapse align-items-center" id="navbarContent">
+      <ul class="navbar-nav mr-auto align-items-center">
         <li class="nav-item">
-          <a class="nav-link" (click)="onOpenModal(null, 'add')">
-            <i class="fa fa-plus-circle mr-1"></i>Add Employee
-          </a>
+          <button class="btn btn-add-glass" (click)="onOpenModal(null, 'add')">
+            <i class="fa fa-plus-circle"></i>Add Employee
+          </button>
         </li>
       </ul>
       
       <!-- Theme Switcher and Search -->
       <div class="d-flex align-items-center ml-auto">
-        <label class="switch mb-0 mr-3">
+        <label class="switch mb-0 mr-4">
           <input type="checkbox" (change)="toggleTheme($event)" [checked]="isDarkTheme" />
           <span class="slider"></span>
         </label>
         
         <form class="form-inline my-2 my-lg-0">
-          <div class="position-relative">
+          <div class="search-group">
             <input
-              class="form-control mr-sm-2 search-input"
+              class="search-input"
               type="search"
               name="search"
               [(ngModel)]="searchKey"
@@ -42,6 +42,9 @@
               placeholder="Search employees..."
               aria-label="Search"
             />
+            <button class="btn-search-round" type="button" (click)="searchEmployees(searchKey)">
+              <i class="fa fa-search"></i>
+            </button>
           </div>
         </form>
       </div>
@@ -68,7 +71,7 @@
     <!-- Stat 2: Distinct Roles -->
     <div class="card glass stats-card">
       <div class="stats-icon-wrapper">
-        <i class="fa fa-id-badge"></i>
+        <i class="fa fa-briefcase"></i>
       </div>
       <div class="stats-info">
         <span class="stats-num">{{ totalJobTitlesCount }}</span>

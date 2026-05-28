@@ -27,6 +27,8 @@ export class AppComponent implements OnInit {
   public cropImageSrc: string | null = null;
   public croppingMode: 'add' | 'edit' | null = null;
   public zoom: number = 1;
+  public minZoom: number = 0.1;
+  public maxZoom: number = 4;
   public panX: number = 0;
   public panY: number = 0;
   private isDragging = false;
@@ -211,8 +213,9 @@ export class AppComponent implements OnInit {
     // Minimum zoom to cover the 180px crop box
     const scaleX = 180 / imgWidth;
     const scaleY = 180 / imgHeight;
-    const minZoom = Math.max(scaleX, scaleY);
-    this.zoom = Math.max(minZoom, 1);
+    this.minZoom = Math.max(scaleX, scaleY);
+    this.maxZoom = this.minZoom * 4;
+    this.zoom = this.minZoom;
 
     // Initial center position
     this.panX = (containerWidth - imgWidth) / 2;

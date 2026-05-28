@@ -169,7 +169,7 @@
                 <div class="cropper-controls">
                   <div class="zoom-control-group">
                     <i class="fa fa-minus"></i>
-                    <input type="range" class="zoom-slider" min="1" max="4" step="0.05" [(ngModel)]="zoom" name="zoomSliderAdd" />
+                    <input type="range" class="zoom-slider" [min]="minZoom" [max]="maxZoom" step="0.01" [(ngModel)]="zoom" name="zoomSliderAdd" />
                     <i class="fa fa-plus"></i>
                   </div>
                 </div>
@@ -266,7 +266,7 @@
                 <div class="cropper-controls">
                   <div class="zoom-control-group">
                     <i class="fa fa-minus"></i>
-                    <input type="range" class="zoom-slider" min="1" max="4" step="0.05" [(ngModel)]="zoom" name="zoomSliderEdit" />
+                    <input type="range" class="zoom-slider" [min]="minZoom" [max]="maxZoom" step="0.01" [(ngModel)]="zoom" name="zoomSliderEdit" />
                     <i class="fa fa-plus"></i>
                   </div>
                 </div>

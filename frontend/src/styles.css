@@ -1,91 +1,175 @@
 @import 'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css';
 @import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css';
-body{
-    margin-top:20px;
-    background: #f5f5f5;
-}
-.card {
-    border: none;
-    -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
-    margin-bottom: 30px;
-}
-.w-60 {
-    width: 60px;
-}
-h1, h2, h3, h4, h5, h6 {
-    margin: 0 0 10px;
-    font-weight: 600;
-}
-.social-links li a {
-    -webkit-border-radius: 50%;
-    background-color: rgba(89,206,181,.85);
-    border-radius: 50%;
-    color: #fff;
-    display: inline-block;
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-    width: 30px;
-    font-size: 12px;
-}
-a {
-    color: #707070;
-}
-/* Limit long text overflow */
-.text-truncate {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+/* Premium Typography and Reset */
+body {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-attachment: fixed;
+    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-img.rounded-circle {
-  border: 1px solid #ddd;
-}
-
-/* Modal mobile padding */
-@media (max-width: 576px) {
-  .modal-dialog {
-    margin: 1rem;
-  }
-
-  .form-group {
-    margin-bottom: 1rem;
-  }
-}
+/* Light / Dark Mode Color System using HSL */
 :root {
-  --bg-color: #f8f9fa;
-  --text-color: #212529;
-  --card-bg: #ffffff;
-  --navbar-bg: #343a40;
-  --navbar-text: #ffffff;
+  --primary-rgb: 99, 102, 241; /* indigo-500 */
+  --accent-rgb: 168, 85, 247; /* purple-500 */
+  --bg-gradient: radial-gradient(circle at top right, hsl(230, 100%, 97%), hsl(210, 40%, 95%));
+  --text-color: hsl(222, 47%, 11%);
+  --text-muted: hsl(215, 16%, 47%);
+  --card-bg: rgba(255, 255, 255, 0.75);
+  --card-border: rgba(255, 255, 255, 0.5);
+  --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05), 0 1px 1px rgba(0, 0, 0, 0.02);
+  --navbar-bg: rgba(255, 255, 255, 0.8);
+  --navbar-border: rgba(0, 0, 0, 0.06);
+  --modal-bg: rgba(255, 255, 255, 0.95);
+  --input-bg: hsl(210, 40%, 98%);
+  --input-border: hsl(215, 16%, 90%);
+  --badge-bg: rgba(99, 102, 241, 0.1);
+  --badge-text: hsl(245, 80%, 60%);
 }
 
 body.dark-theme {
-  --bg-color: #121212;
-  --text-color: #e0e0e0;
-  --card-bg: #1e1e1e;
-  --navbar-bg: #1f1f1f;
-  --navbar-text: #ffffff;
+  --bg-gradient: radial-gradient(circle at top right, hsl(230, 35%, 12%), hsl(222, 47%, 7%));
+  --text-color: hsl(210, 40%, 98%);
+  --text-muted: hsl(215, 20%, 65%);
+  --card-bg: rgba(20, 24, 33, 0.75);
+  --card-border: rgba(255, 255, 255, 0.05);
+  --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 1px 0px rgba(255, 255, 255, 0.05);
+  --navbar-bg: rgba(15, 18, 25, 0.8);
+  --navbar-border: rgba(255, 255, 255, 0.05);
+  --modal-bg: rgba(18, 22, 30, 0.95);
+  --input-bg: hsl(220, 30%, 12%);
+  --input-border: hsl(222, 20%, 20%);
+  --badge-bg: rgba(168, 85, 247, 0.15);
+  --badge-text: hsl(280, 85%, 65%);
 }
 
-/* Apply variables */
+/* Apply Body background */
 body {
-  background-color: var(--bg-color);
+  background: var(--bg-gradient);
   color: var(--text-color);
 }
 
-.navbar {
-  background-color: var(--navbar-bg) !important;
-  color: var(--navbar-text);
-}
-
-.card {
+/* Glassmorphism utility */
+.glass {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+}
+
+/* Header Text Styles */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Custom Scrollbar for premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(var(--primary-rgb), 0.2);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--primary-rgb), 0.4);
+}
+
+/* Custom Button Overrides */
+.btn {
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.5rem 1.25rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #10B981, #059669);
+  border: none;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+.btn-success:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, rgb(var(--primary-rgb)), rgb(var(--accent-rgb)));
+  border: none;
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.4);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--input-border);
+  color: var(--text-color);
+}
+.btn-secondary:hover {
+  background: var(--input-bg);
   color: var(--text-color);
 }
 
-.list-group-item {
-  background-color: var(--card-bg);
-  color: var(--text-color);
+/* Modern inputs inside Modals */
+.form-control {
+  background-color: var(--input-bg) !important;
+  border: 1px solid var(--input-border) !important;
+  color: var(--text-color) !important;
+  border-radius: 10px !important;
+  padding: 0.75rem 1rem !important;
+  height: auto !important;
+  transition: all 0.25s ease !important;
+}
+.form-control:focus {
+  border-color: rgba(var(--primary-rgb), 0.5) !important;
+  box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.15) !important;
+  outline: none !important;
+}
+
+/* Modern Sleek Modals */
+.modal-content {
+  background-color: var(--modal-bg) !important;
+  border: 1px solid var(--card-border) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--card-shadow) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.modal-header {
+  border-bottom: 1px solid var(--card-border);
+  padding: 1.5rem;
+}
+.modal-footer {
+  border-top: 1px solid var(--card-border);
+  padding: 1.25rem 1.5rem;
+}
+.modal-body {
+  padding: 1.5rem;
+}
+.close {
+  color: var(--text-color) !important;
+  text-shadow: none !important;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+.close:hover {
+  opacity: 1;
+}
+
+/* Form Label Styling */
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
 }

@@ -43,10 +43,10 @@ export class AppComponent implements OnInit {
 
   // Add new employee
   public onAddEmployee(addForm: NgForm): void {
-    document.getElementById('add-employee-form')?.click();
     this.employeeService.addEmployee(addForm.value).subscribe({
       next: (response: Employee) => {
         console.log(response);
+        document.getElementById('add-employee-close')?.click();
         this.getEmployees();
         addForm.reset();
       },
@@ -62,6 +62,7 @@ export class AppComponent implements OnInit {
     this.employeeService.updateEmployee(this.editEmployee).subscribe({
       next: (response: Employee) => {
         console.log(response);
+        document.getElementById('update-employee-close')?.click();
         this.getEmployees();
       },
       error: (error: HttpErrorResponse) => {
@@ -75,6 +76,7 @@ export class AppComponent implements OnInit {
     this.employeeService.deleteEmployee(this.selectedEmployee.id).subscribe({
       next: () => {
         console.log('Deleted successfully');
+        document.getElementById('delete-employee-close')?.click();
         this.getEmployees();
       },
       error: (error: HttpErrorResponse) => {

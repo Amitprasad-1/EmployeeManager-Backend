@@ -31,7 +31,7 @@ public class Employee implements Serializable   {
     {
         return id;
     }
-    public void setId(long id)
+    public void setId(Long id)
     {
         this.id=id;
     }
@@ -90,11 +90,11 @@ public class Employee implements Serializable   {
     public String toString() {
         return "Employee{" +
                 "id=" + id +
-                ",name+'" + name + '\'' +
-                ",email+'" + email + '\'' +
-                ",jobTitle+'" + jobTitle + '\'' +
-                ",phone+'" + phone + '\'' +
-                ",imageUrl='" + imageUrl + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", jobTitle='" + jobTitle + '\'' +
+                ", phone='" + phone + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 '}';
 
     }

@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'http://your-production-url.com'
+  apiBaseUrl: 'https://your-generated-railway-url.up.railway.app' // Paste your actual Railway URL here
 };

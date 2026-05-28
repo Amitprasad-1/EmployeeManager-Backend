@@ -18,5 +18,15 @@ public class EmployeemanagerApplication {
 		SpringApplication.run(EmployeemanagerApplication.class, args);
 	}
 
-	
+	@Bean
+	public org.springframework.boot.CommandLineRunner alterTableColumn(org.springframework.jdbc.core.JdbcTemplate jdbcTemplate) {
+		return args -> {
+			try {
+				jdbcTemplate.execute("ALTER TABLE employee MODIFY image_url LONGTEXT");
+				System.out.println("--- image_url column successfully altered to LONGTEXT ---");
+			} catch (Exception e) {
+				System.out.println("--- Column alter failed or already altered: " + e.getMessage() + " ---");
+			}
+		};
+	}
 }

@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://employeemanager-backend-production.up.railway.app'
+  apiBaseUrl: 'http://localhost:8081'
 };

@@ -46,4 +46,34 @@ public class EmployeemanagerApplication {
 			}
 		};
 	}
+
+	@Bean
+	public org.springframework.boot.CommandLineRunner bootstrapUsers(tech.getarrays.employeemanager.repo.UserRepository userRepository, org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
+		return args -> {
+			try {
+				if (!userRepository.existsByUsername("admin")) {
+					tech.getarrays.employeemanager.model.User admin = new tech.getarrays.employeemanager.model.User(
+							"admin",
+							"admin@employeemanager.com",
+							passwordEncoder.encode("admin"),
+							"ROLE_ADMIN"
+					);
+					userRepository.save(admin);
+					System.out.println("--- Bootstrapped Admin user: admin/admin ---");
+				}
+				if (!userRepository.existsByUsername("user")) {
+					tech.getarrays.employeemanager.model.User user = new tech.getarrays.employeemanager.model.User(
+							"user",
+							"user@employeemanager.com",
+							passwordEncoder.encode("user"),
+							"ROLE_USER"
+					);
+					userRepository.save(user);
+					System.out.println("--- Bootstrapped Standard user: user/user ---");
+				}
+			} catch (Exception e) {
+				System.out.println("--- User bootstrapping failed: " + e.getMessage() + " ---");
+			}
+		};
+	}
 }

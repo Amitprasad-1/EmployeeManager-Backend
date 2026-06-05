@@ -9,4 +9,6 @@ export interface Employee {
   status: string;
   dateOfJoining: string;
   contractType: string;
+  employeeCode?: string;
 }
+

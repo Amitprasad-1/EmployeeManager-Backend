@@ -1,0 +1,231 @@
+<!-- Ambient Floating Background Blobs -->
+<div class="bg-blob-container">
+  <div class="bg-blob bg-blob-1"></div>
+  <div class="bg-blob bg-blob-2"></div>
+</div>
+
+<!-- Theme toggle at top right -->
+<div class="top-bar-controls">
+  <label class="switch">
+    <input type="checkbox" (change)="toggleTheme($event)" [checked]="isDarkTheme" />
+    <span class="slider"></span>
+  </label>
+</div>
+
+<div class="login-wrapper">
+  <div class="login-container">
+    
+    <!-- Branding Header -->
+    <div class="login-header text-center">
+      <div class="logo-wrapper">
+        <img src="icon-192.png" alt="Workforce Logo" class="app-logo" />
+      </div>
+      <h2 class="app-title">Workforce Manager</h2>
+      <p class="app-subtitle text-muted">Secure Directory & Personnel Gateway</p>
+    </div>
+
+    <!-- Glassmorphic Card -->
+    <div class="card glass login-card">
+      <!-- Tab Headers -->
+      <div class="card-header border-0 pb-0 d-flex justify-content-center">
+        <ul class="nav nav-tabs border-0" style="gap: 10px;">
+          <li class="nav-item">
+            <button class="nav-link border-0" [ngClass]="{'active': activeTab === 'login'}" (click)="switchTab('login')">
+              Sign In
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link border-0" [ngClass]="{'active': activeTab === 'register'}" (click)="switchTab('register')">
+              Register
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card-body pt-4">
+        
+        <!-- Alerts -->
+        <div class="alert alert-danger glass-alert d-flex align-items-center" role="alert" *ngIf="errorMessage">
+          <i class="fa fa-exclamation-triangle mr-2"></i>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <div class="alert alert-success glass-alert d-flex align-items-center" role="alert" *ngIf="successMessage">
+          <i class="fa fa-check-circle mr-2"></i>
+          <span>{{ successMessage }}</span>
+        </div>
+
+        <!-- 1. Login Form -->
+        <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)" *ngIf="activeTab === 'login'">
+          <div class="form-group mb-3">
+            <label for="loginUsername">Username</label>
+            <div class="input-icon-wrapper">
+              <i class="fa fa-user input-icon"></i>
+              <input 
+                type="text" 
+                class="form-control pl-5" 
+                id="loginUsername" 
+                name="username" 
+                [(ngModel)]="loginData.username" 
+                #usernameInput="ngModel" 
+                placeholder="e.g. admin" 
+                required
+              />
+            </div>
+            <div *ngIf="usernameInput.invalid && (usernameInput.dirty || usernameInput.touched)" class="validation-error">
+              <i class="fa fa-exclamation-circle"></i> Username is required.
+            </div>
+          </div>
+
+          <div class="form-group mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <label for="loginPassword" class="mb-1">Password</label>
+            </div>
+            <div class="input-icon-wrapper">
+              <i class="fa fa-lock input-icon"></i>
+              <input 
+                type="password" 
+                class="form-control pl-5" 
+                id="loginPassword" 
+                name="password" 
+                [(ngModel)]="loginData.password" 
+                #passwordInput="ngModel" 
+                placeholder="e.g. admin" 
+                required
+              />
+            </div>
+            <div *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)" class="validation-error">
+              <i class="fa fa-exclamation-circle"></i> Password is required.
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            class="btn btn-primary w-100 d-flex justify-content-center align-items-center mb-3 py-3"
+            [disabled]="loginForm.invalid || isLoading"
+          >
+            <i class="fa fa-spinner fa-spin mr-2" *ngIf="isLoading"></i>
+            <span>{{ isLoading ? 'Authenticating...' : 'Sign In' }}</span>
+          </button>
+
+          <!-- Guest Browse Option -->
+          <div class="text-center mt-3">
+            <button type="button" class="btn btn-link btn-sm text-muted" (click)="continueAsGuest()">
+              Browse as Guest (Read-Only) <i class="fa fa-arrow-right ml-1"></i>
+            </button>
+          </div>
+        </form>
+
+        <!-- 2. Register Form -->
+        <form #registerForm="ngForm" (ngSubmit)="onRegister(registerForm)" *ngIf="activeTab === 'register'">
+          <div class="form-group mb-3">
+            <label for="regUsername">Username</label>
+            <div class="input-icon-wrapper">
+              <i class="fa fa-user input-icon"></i>
+              <input 
+                type="text" 
+                class="form-control pl-5" 
+                id="regUsername" 
+                name="username" 
+                [(ngModel)]="registerData.username" 
+                #regUsernameInput="ngModel" 
+                placeholder="Choose username" 
+                required
+              />
+            </div>
+            <div *ngIf="regUsernameInput.invalid && (regUsernameInput.dirty || regUsernameInput.touched)" class="validation-error">
+              <i class="fa fa-exclamation-circle"></i> Username is required.
+            </div>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="regEmail">Email Address</label>
+            <div class="input-icon-wrapper">
+              <i class="fa fa-envelope input-icon"></i>
+              <input 
+                type="email" 
+                class="form-control pl-5" 
+                id="regEmail" 
+                name="email" 
+                [(ngModel)]="registerData.email" 
+                #regEmailInput="ngModel" 
+                placeholder="you@company.com" 
+                email 
+                required
+              />
+            </div>
+            <div *ngIf="regEmailInput.invalid && (regEmailInput.dirty || regEmailInput.touched)" class="validation-error">
+              <i class="fa fa-exclamation-circle"></i> Please enter a valid email.
+            </div>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="regPassword">Password</label>
+            <div class="input-icon-wrapper">
+              <i class="fa fa-lock input-icon"></i>
+              <input 
+                type="password" 
+                class="form-control pl-5" 
+                id="regPassword" 
+                name="password" 
+                [(ngModel)]="registerData.password" 
+                #regPasswordInput="ngModel" 
+                placeholder="Min 5 characters" 
+                minlength="5"
+                required
+              />
+            </div>
+            <div *ngIf="regPasswordInput.invalid && (regPasswordInput.dirty || regPasswordInput.touched)" class="validation-error">
+              <i class="fa fa-exclamation-circle"></i> Password must be at least 5 characters.
+            </div>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="regRole">Select Role Profile</label>
+            <select class="form-control" id="regRole" name="role" [(ngModel)]="registerData.role" required>
+              <option value="ROLE_USER">Standard User (Read-Only)</option>
+              <option value="ROLE_ADMIN">Administrator (Read & Write)</option>
+            </select>
+          </div>
+
+          <button 
+            type="submit" 
+            class="btn btn-success w-100 d-flex justify-content-center align-items-center py-3"
+            [disabled]="registerForm.invalid || isLoading"
+          >
+            <i class="fa fa-spinner fa-spin mr-2" *ngIf="isLoading"></i>
+            <span>{{ isLoading ? 'Creating account...' : 'Create Account' }}</span>
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- Bootstrap Credentials Helper Footer Box -->
+    <div class="credentials-helper mt-4 text-center glass py-3 px-4">
+      <h6 class="mb-2" style="font-weight: 700; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase;">Bootstrapped Credentials</h6>
+      <div class="d-flex justify-content-around text-muted" style="font-size: 0.8rem;">
+        <div>
+          <span style="font-weight: 600;">Admin:</span> <code>admin</code> / <code>admin</code>
+        </div>
+        <div>
+          <span style="font-weight: 600;">Standard User:</span> <code>user</code> / <code>user</code>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Toasts Notification Container -->
+<div class="toast-container">
+  <div *ngFor="let toast of toasts" class="toast-notification glass {{ toast.type }}">
+    <i class="fa mr-2" [ngClass]="{
+      'fa-check-circle text-success': toast.type === 'success',
+      'fa-times-circle text-danger': toast.type === 'error',
+      'fa-info-circle text-info': toast.type === 'info'
+    }"></i>
+    <span>{{ toast.message }}</span>
+    <button type="button" class="toast-close" (click)="removeToast(toast.id)">&times;</button>
+  </div>
+</div>

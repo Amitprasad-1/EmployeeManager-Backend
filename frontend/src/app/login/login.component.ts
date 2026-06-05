@@ -69,6 +69,35 @@ export class LoginComponent implements OnInit {
     this.successMessage = '';
   }
 
+  private autoLoginTimeout: any = null;
+
+  public onCredentialsChange(form: NgForm): void {
+    const u = this.loginData.username.trim();
+    const p = this.loginData.password.trim();
+    if (u && p) {
+      // Instant login for standard demo credentials
+      if ((u === 'admin' && p === 'admin') || (u === 'user' && p === 'user')) {
+        if (this.autoLoginTimeout) {
+          clearTimeout(this.autoLoginTimeout);
+        }
+        if (form && form.valid && !this.isLoading) {
+          this.onLogin(form);
+        }
+        return;
+      }
+
+      // Debounced login for custom credentials (1.2s typing pause)
+      if (this.autoLoginTimeout) {
+        clearTimeout(this.autoLoginTimeout);
+      }
+      this.autoLoginTimeout = setTimeout(() => {
+        if (form && form.valid && !this.isLoading) {
+          this.onLogin(form);
+        }
+      }, 1200);
+    }
+  }
+
   public onLogin(form: NgForm): void {
     if (form.invalid) return;
     this.isLoading = true;

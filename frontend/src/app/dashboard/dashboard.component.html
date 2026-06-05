@@ -26,12 +26,11 @@
       
       <!-- Center section: Search bar -->
       <div class="navbar-search-wrapper mx-auto">
-        <form class="form-inline w-100" (submit)="$event.preventDefault()">
-          <div class="modern-search-group">
-            <i class="fa fa-search search-icon-left"></i>
+        <form class="form-inline">
+          <div class="search-group">
             <input
               #searchInput
-              class="modern-search-input"
+              class="search-input"
               type="search"
               name="search"
               [(ngModel)]="searchKey"
@@ -39,7 +38,9 @@
               placeholder="Search employees..."
               aria-label="Search"
             />
-            <span class="search-shortcut">Ctrl K</span>
+            <button class="btn-search-round" type="button" (click)="searchEmployees(searchKey)">
+              <i class="fa fa-search"></i>
+            </button>
           </div>
         </form>
       </div>
@@ -52,7 +53,7 @@
           <button class="btn btn-add-modern" (click)="onOpenModal(null, 'add')" *ngIf="isAdmin()">
             <i class="fa fa-plus-circle"></i>Add Employee
           </button>
-          <button class="btn btn-export-modern" (click)="exportToCSV()">
+          <button class="btn btn-export-glass" (click)="exportToCSV()">
             <i class="fa fa-download"></i>Export CSV
           </button>
         </div>

@@ -75,10 +75,7 @@
           <div class="user-avatar-gradient">
             {{ getUsername() ? getUsername().charAt(0).toUpperCase() : 'U' }}
           </div>
-          <div class="user-profile-info text-left">
-            <span class="profile-name">{{ getUsername() }}</span>
-            <span class="profile-role-badge" [ngClass]="getRoleName().toLowerCase()">{{ getRoleName() }}</span>
-          </div>
+          <span class="profile-name">{{ getUsername() }}</span>
         </div>
 
         <!-- Auth Button -->

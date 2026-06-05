@@ -550,9 +550,9 @@ body.dark-theme .modern-profile-chip {
   }
   .navbar-actions-group {
     width: 100%;
-    justify-content: space-between;
+    justify-content: center;
   }
-  .btn-add-modern, .btn-export-modern {
+  .btn-add-modern, .btn-export-glass {
     flex: 1;
     justify-content: center;
   }

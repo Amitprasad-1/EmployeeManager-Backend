@@ -29,13 +29,44 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
+  private setStorageItem(key: string, value: string): void {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem(key, value);
+      }
+    } catch (e) {
+      console.warn('localStorage is not accessible:', e);
+    }
+  }
+
+  private getStorageItem(key: string): string | null {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        return localStorage.getItem(key);
+      }
+    } catch (e) {
+      console.warn('localStorage is not accessible:', e);
+    }
+    return null;
+  }
+
+  private removeStorageItem(key: string): void {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.removeItem(key);
+      }
+    } catch (e) {
+      console.warn('localStorage is not accessible:', e);
+    }
+  }
+
   public login(loginRequest: LoginRequest): Observable<JwtResponse> {
     return this.http.post<JwtResponse>(`${this.apiServerUrl}/auth/login`, loginRequest).pipe(
       tap((response) => {
-        localStorage.removeItem('guestMode');
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('username', response.username);
-        localStorage.setItem('role', response.role);
+        this.removeStorageItem('guestMode');
+        this.setStorageItem('token', response.token);
+        this.setStorageItem('username', response.username);
+        this.setStorageItem('role', response.role);
       })
     );
   }
@@ -45,42 +76,42 @@ export class AuthService {
   }
 
   public setGuestMode(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('role');
-    localStorage.setItem('guestMode', 'true');
+    this.removeStorageItem('token');
+    this.removeStorageItem('username');
+    this.removeStorageItem('role');
+    this.setStorageItem('guestMode', 'true');
   }
 
   public isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    return !!this.getStorageItem('token');
   }
 
   public isGuest(): boolean {
-    return localStorage.getItem('guestMode') === 'true';
+    return this.getStorageItem('guestMode') === 'true';
   }
 
   public isAdmin(): boolean {
-    return localStorage.getItem('role') === 'ROLE_ADMIN';
+    return this.getStorageItem('role') === 'ROLE_ADMIN';
   }
 
   public getUsername(): string {
     if (this.isGuest()) {
       return 'Guest User';
     }
-    return localStorage.getItem('username') || 'User';
+    return this.getStorageItem('username') || 'User';
   }
 
   public getRole(): string {
     if (this.isGuest()) {
       return 'ROLE_GUEST';
     }
-    return localStorage.getItem('role') || 'ROLE_USER';
+    return this.getStorageItem('role') || 'ROLE_USER';
   }
 
   public logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('role');
-    localStorage.removeItem('guestMode');
+    this.removeStorageItem('token');
+    this.removeStorageItem('username');
+    this.removeStorageItem('role');
+    this.removeStorageItem('guestMode');
   }
 }

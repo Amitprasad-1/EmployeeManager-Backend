@@ -134,17 +134,32 @@ export class LoginComponent implements OnInit {
   public toggleTheme(event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
     this.isDarkTheme = isChecked;
-    if (isChecked) {
-      document.body.classList.add('dark-theme');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.body.classList.remove('dark-theme');
-      localStorage.setItem('theme', 'light');
+    try {
+      if (isChecked) {
+        document.body.classList.add('dark-theme');
+        if (typeof window !== 'undefined' && window.localStorage) {
+          localStorage.setItem('theme', 'dark');
+        }
+      } else {
+        document.body.classList.remove('dark-theme');
+        if (typeof window !== 'undefined' && window.localStorage) {
+          localStorage.setItem('theme', 'light');
+        }
+      }
+    } catch (e) {
+      console.warn('localStorage is not accessible:', e);
     }
   }
 
   private loadTheme(): void {
-    const savedTheme = localStorage.getItem('theme');
+    let savedTheme = null;
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        savedTheme = localStorage.getItem('theme');
+      }
+    } catch (e) {
+      console.warn('localStorage is not accessible:', e);
+    }
     this.isDarkTheme = savedTheme === 'dark';
     if (this.isDarkTheme) {
       document.body.classList.add('dark-theme');

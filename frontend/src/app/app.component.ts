@@ -21,6 +21,12 @@ export class AppComponent implements OnInit {
   public searchKey: string = '';
   public isDarkTheme: boolean = false;
   public isLoading: boolean = true;
+
+  // Filter and Sorting state
+  public filterDepartment: string = 'All';
+  public filterStatus: string = 'All';
+  public sortBy: string = 'nameAsc';
+  public departments: string[] = [];
   
   // Toast notifications state
   public toasts: Array<{ id: number; message: string; type: 'success' | 'error' | 'info' }> = [];
@@ -74,6 +80,8 @@ export class AppComponent implements OnInit {
         this.employees = response;
         this.allEmployees = response; // backup list for search
         this.calculateStats();
+        this.updateDepartmentsList(); // update dropdown choices
+        this.applyFilters(); // run active search/filter/sort
         this.isLoading = false;
       },
       error: (error: HttpErrorResponse) => {
@@ -147,20 +155,56 @@ export class AppComponent implements OnInit {
 
   // Search employees
   public searchEmployees(key: string): void {
-    console.log(key);
-    if (!key.trim()) {
-      this.employees = [...this.allEmployees];
-      return;
+    this.searchKey = key;
+    this.applyFilters();
+  }
+
+  // Extract unique departments from loaded employees list
+  private updateDepartmentsList(): void {
+    const depts = this.allEmployees
+      .map(e => e.department)
+      .filter((dept): dept is string => !!dept && dept.trim() !== '');
+    this.departments = Array.from(new Set(depts)).sort();
+  }
+
+  // Filter and sort core logic
+  public applyFilters(): void {
+    let filtered = [...this.allEmployees];
+
+    // 1. Search filter
+    const search = this.searchKey.trim().toLowerCase();
+    if (search) {
+      filtered = filtered.filter(e =>
+        (e.name || '').toLowerCase().includes(search) ||
+        (e.email || '').toLowerCase().includes(search) ||
+        (e.phone || '').toLowerCase().includes(search) ||
+        (e.jobTitle || '').toLowerCase().includes(search) ||
+        (e.department || '').toLowerCase().includes(search)
+      );
     }
 
-    const results: Employee[] = this.allEmployees.filter((employee) =>
-      employee.name.toLowerCase().includes(key.toLowerCase()) ||
-      employee.email.toLowerCase().includes(key.toLowerCase()) ||
-      employee.phone.toLowerCase().includes(key.toLowerCase()) ||
-      employee.jobTitle.toLowerCase().includes(key.toLowerCase())
-    );
+    // 2. Department filter
+    if (this.filterDepartment !== 'All') {
+      filtered = filtered.filter(e => e.department === this.filterDepartment);
+    }
 
-    this.employees = results;
+    // 3. Status filter
+    if (this.filterStatus !== 'All') {
+      filtered = filtered.filter(e => e.status === this.filterStatus);
+    }
+
+    // 4. Sort selection
+    if (this.sortBy === 'nameAsc') {
+      filtered.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    } else if (this.sortBy === 'nameDesc') {
+      filtered.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
+    } else if (this.sortBy === 'dateNewest') {
+      filtered.sort((a, b) => (b.dateOfJoining || '').localeCompare(a.dateOfJoining || ''));
+    } else if (this.sortBy === 'dateOldest') {
+      filtered.sort((a, b) => (a.dateOfJoining || '').localeCompare(b.dateOfJoining || ''));
+    }
+
+    this.employees = filtered;
   }
 
   // Theme toggle logic

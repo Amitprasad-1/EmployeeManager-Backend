@@ -96,6 +96,43 @@
     </div>
   </div>
 
+  <!-- Filters and Sorting Bar -->
+  <div class="card glass filters-bar mb-4 p-3 d-flex flex-wrap align-items-center justify-content-between gap-3" style="flex-direction: row; align-items: center;">
+    <!-- Filter inputs -->
+    <div class="d-flex flex-wrap align-items-center" style="gap: 15px;">
+      <!-- Department Filter -->
+      <div class="filter-item">
+        <label class="filter-label mb-0 mr-2"><i class="fa fa-briefcase mr-1"></i>Dept:</label>
+        <select class="filter-select" [(ngModel)]="filterDepartment" (change)="applyFilters()">
+          <option value="All">All Departments</option>
+          <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+        </select>
+      </div>
+
+      <!-- Status Filter -->
+      <div class="filter-item">
+        <label class="filter-label mb-0 mr-2"><i class="fa fa-circle mr-1"></i>Status:</label>
+        <select class="filter-select" [(ngModel)]="filterStatus" (change)="applyFilters()">
+          <option value="All">All Statuses</option>
+          <option value="Active">Active</option>
+          <option value="On Leave">On Leave</option>
+          <option value="Inactive">Inactive</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Sorting controls -->
+    <div class="filter-item">
+      <label class="filter-label mb-0 mr-2"><i class="fa fa-sort mr-1"></i>Sort By:</label>
+      <select class="filter-select" [(ngModel)]="sortBy" (change)="applyFilters()">
+        <option value="nameAsc">Name (A-Z)</option>
+        <option value="nameDesc">Name (Z-A)</option>
+        <option value="dateNewest">Joining (Newest)</option>
+        <option value="dateOldest">Joining (Oldest)</option>
+      </select>
+    </div>
+  </div>
+
   <!-- Loading Skeletons -->
   <div *ngIf="isLoading">
     <div class="row justify-content-center gx-4 gy-4">

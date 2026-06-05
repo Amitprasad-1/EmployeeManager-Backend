@@ -180,3 +180,34 @@
   margin-bottom: 1.5rem;
   opacity: 0.5;
 }
+
+/* Filters and Sorting Bar */
+.filters-bar {
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02) !important;
+}
+.filter-item {
+  display: flex;
+  align-items: center;
+}
+.filter-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.filter-select {
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-color);
+  border-radius: 10px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.filter-select:focus {
+  border-color: rgb(var(--primary-rgb));
+  box-shadow: 0 0 8px rgba(var(--primary-rgb), 0.15);
+}

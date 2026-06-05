@@ -17,9 +17,14 @@
     
     <div class="collapse navbar-collapse align-items-center" id="navbarContent">
       <ul class="navbar-nav mr-auto align-items-center">
-        <li class="nav-item">
+        <li class="nav-item mr-2">
           <button class="btn btn-add-glass" (click)="onOpenModal(null, 'add')">
             <i class="fa fa-plus-circle"></i>Add Employee
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="btn btn-export-glass" (click)="exportToCSV()">
+            <i class="fa fa-download"></i>Export CSV
           </button>
         </li>
       </ul>

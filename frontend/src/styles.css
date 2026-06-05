@@ -403,6 +403,27 @@ body.dark-theme .btn-add-glass:hover {
   box-shadow: 0 4px 15px rgba(var(--accent-rgb), 0.4);
 }
 
+.btn-export-glass {
+  background: rgba(16, 185, 129, 0.08) !important;
+  border: 1px solid rgba(16, 185, 129, 0.25) !important;
+  color: #10b981 !important;
+}
+.btn-export-glass:hover {
+  background: #10b981 !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+body.dark-theme .btn-export-glass {
+  background: rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+body.dark-theme .btn-export-glass:hover {
+  background: #10b981 !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+}
+
 /* Premium Search Input Group & Round Button */
 .search-group {
   display: flex;

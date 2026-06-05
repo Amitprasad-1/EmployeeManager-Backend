@@ -352,4 +352,39 @@ export class AppComponent implements OnInit {
     }
     this.cancelCrop();
   }
+
+  // Export employees list to CSV format
+  public exportToCSV(): void {
+    if (this.employees.length === 0) {
+      this.showToast('No employee records to export.', 'info');
+      return;
+    }
+
+    const headers = ['Employee ID', 'Name', 'Email', 'Job Title', 'Phone', 'Employee Code'];
+    const csvRows = [headers.join(',')];
+
+    for (const employee of this.employees) {
+      const row = [
+        employee.id || '',
+        `"${(employee.name || '').replace(/"/g, '""')}"`,
+        `"${(employee.email || '').replace(/"/g, '""')}"`,
+        `"${(employee.jobTitle || '').replace(/"/g, '""')}"`,
+        `"${(employee.phone || '').replace(/"/g, '""')}"`,
+        `"${(employee.employeeCode || '').replace(/"/g, '""')}"`
+      ];
+      csvRows.push(row.join(','));
+    }
+
+    const csvContent = csvRows.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `employees_export_${new Date().toISOString().slice(0, 10)}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    this.showToast('Employee list exported to CSV successfully!', 'success');
+  }
 }

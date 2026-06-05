@@ -220,11 +220,10 @@
                 </label>
                 <input id="fileInputAdd" #fileInputAdd type="file" (change)="onFileSelected($event, 'add')" accept="image/*" class="d-none" />
                 <div class="mt-2 text-center d-flex align-items-center justify-content-center">
-                  <button type="button" class="btn btn-link btn-sm text-muted p-0" *ngIf="newEmployee.imageUrl" (click)="newEmployee.imageUrl = ''">
+                  <button type="button" class="btn btn-link btn-sm text-muted p-0" *ngIf="newEmployee.imageUrl" (click)="newEmployee.imageUrl = ''; showUrlInputAdd = false">
                     Clear Photo
                   </button>
-                  <span class="text-muted mx-2" *ngIf="newEmployee.imageUrl">/</span>
-                  <button type="button" class="btn btn-link btn-sm text-muted p-0" (click)="showUrlInputAdd = !showUrlInputAdd">
+                  <button type="button" class="btn btn-link btn-sm text-muted p-0" *ngIf="!newEmployee.imageUrl" (click)="showUrlInputAdd = !showUrlInputAdd">
                     {{ showUrlInputAdd ? 'Use Upload instead' : 'Or enter image URL' }}
                   </button>
                 </div>
@@ -331,11 +330,10 @@
                 </label>
                 <input id="fileInputEdit" #fileInputEdit type="file" (change)="onFileSelected($event, 'edit')" accept="image/*" class="d-none" />
                 <div class="mt-2 text-center d-flex align-items-center justify-content-center">
-                  <button type="button" class="btn btn-link btn-sm text-muted p-0" *ngIf="editEmployee.imageUrl" (click)="editEmployee.imageUrl = ''">
+                  <button type="button" class="btn btn-link btn-sm text-muted p-0" *ngIf="editEmployee.imageUrl" (click)="editEmployee.imageUrl = ''; showUrlInputEdit = false">
                     Clear Photo
                   </button>
-                  <span class="text-muted mx-2" *ngIf="editEmployee.imageUrl">/</span>
-                  <button type="button" class="btn btn-link btn-sm text-muted p-0" (click)="showUrlInputEdit = !showUrlInputEdit">
+                  <button type="button" class="btn btn-link btn-sm text-muted p-0" *ngIf="!editEmployee.imageUrl" (click)="showUrlInputEdit = !showUrlInputEdit">
                     {{ showUrlInputEdit ? 'Use Upload instead' : 'Or enter image URL' }}
                   </button>
                 </div>

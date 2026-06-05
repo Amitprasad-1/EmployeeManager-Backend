@@ -1,4 +1,4 @@
-const CACHE_NAME = 'emp-manager-cache-v1';
+const CACHE_NAME = 'emp-manager-cache-v2';
 const ASSETS = [
   '/',
   '/index.html',

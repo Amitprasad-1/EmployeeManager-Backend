@@ -137,7 +137,7 @@ export class DashboardComponent implements OnInit {
     );
     this.totalJobTitlesCount = uniqueTitles.size;
     
-    this.activeContractsCount = this.allEmployees.filter(e => e.phone && e.email).length;
+    this.activeContractsCount = this.allEmployees.filter(e => (e.status || 'Active') === 'Active').length;
   }
 
   // Add new employee

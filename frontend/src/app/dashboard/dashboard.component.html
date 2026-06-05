@@ -5,45 +5,25 @@
 </div>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+<nav class="navbar navbar-expand-lg sticky-top">
   <div class="container-fluid align-items-center">
+    <!-- Brand -->
     <a class="navbar-brand d-flex align-items-center" href="#">
       <i class="fa fa-users mr-2"></i>Employee Manager
     </a>
+    
+    <!-- Mobile Hamburger Toggler -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
       aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     
+    <!-- Collapsible Wrapper -->
     <div class="collapse navbar-collapse align-items-center" id="navbarContent">
-      <ul class="navbar-nav mr-auto align-items-center">
-        <!-- Only Admins can Add Employees -->
-        <li class="nav-item mr-2" *ngIf="isAdmin()">
-          <button class="btn btn-add-glass" (click)="onOpenModal(null, 'add')">
-            <i class="fa fa-plus-circle"></i>Add Employee
-          </button>
-        </li>
-        <li class="nav-item">
-          <button class="btn btn-export-glass" (click)="exportToCSV()">
-            <i class="fa fa-download"></i>Export CSV
-          </button>
-        </li>
-      </ul>
       
-      <!-- Theme Switcher and Search controls container -->
-      <div class="navbar-controls-wrapper ml-auto">
-        <!-- User Info Display -->
-        <div class="navbar-text d-flex align-items-center" style="color: var(--text-color); font-weight: 600; font-size: 0.9rem;">
-          <i class="fa fa-user-circle mr-2" style="color: rgb(var(--primary-rgb)); font-size: 1.1rem;"></i>
-          <span>{{ getUsername() }} ({{ getRoleName() }})</span>
-        </div>
-
-        <label class="switch mb-0">
-          <input type="checkbox" (change)="toggleTheme($event)" [checked]="isDarkTheme" />
-          <span class="slider"></span>
-        </label>
-        
-        <form class="form-inline my-2 my-lg-0">
+      <!-- Center section: Search bar -->
+      <div class="navbar-search-container mx-auto">
+        <form class="form-inline">
           <div class="search-group">
             <input
               class="search-input"
@@ -59,6 +39,39 @@
             </button>
           </div>
         </form>
+      </div>
+      
+      <!-- Right section: Controls & Actions -->
+      <div class="navbar-controls-wrapper ml-auto d-flex align-items-center gap-3">
+        <!-- Actions (Add Employee & Export CSV) -->
+        <div class="navbar-actions d-flex align-items-center gap-2">
+          <!-- Only Admins can Add Employees -->
+          <button class="btn btn-add-glass" (click)="onOpenModal(null, 'add')" *ngIf="isAdmin()">
+            <i class="fa fa-plus-circle"></i>Add Employee
+          </button>
+          <button class="btn btn-export-glass" (click)="exportToCSV()">
+            <i class="fa fa-download"></i>Export CSV
+          </button>
+        </div>
+
+        <!-- Theme Switcher -->
+        <label class="switch mb-0">
+          <input type="checkbox" (change)="toggleTheme($event)" [checked]="isDarkTheme" />
+          <span class="slider"></span>
+        </label>
+        
+        <span class="navbar-divider"></span>
+
+        <!-- User Profile Chip (Replaces duplicate user User) -->
+        <div class="user-profile-chip d-flex align-items-center" *ngIf="!isGuest()">
+          <div class="user-avatar-circle">
+            <i class="fa fa-user"></i>
+          </div>
+          <div class="user-meta d-flex flex-column text-left">
+            <span class="user-name">{{ getUsername() }}</span>
+            <span class="user-role-badge" [ngClass]="getRoleName().toLowerCase()">{{ getRoleName() }}</span>
+          </div>
+        </div>
 
         <!-- Auth Button -->
         <button class="btn btn-secondary btn-sm" (click)="logout()" *ngIf="!isGuest()">

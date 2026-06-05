@@ -534,7 +534,15 @@ body.dark-theme .avatar-uploader-circle:hover {
   position: relative;
   width: 100%;
   height: 280px;
-  background-color: #0d1117;
+  background-color: #0b0f17;
+  /* Premium Dark Checkerboard Pattern */
+  background-image: 
+    linear-gradient(45deg, #182235 25%, transparent 25%), 
+    linear-gradient(-45deg, #182235 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #182235 75%), 
+    linear-gradient(-45deg, transparent 75%, #182235 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
   border-radius: 12px;
   overflow: hidden;
   display: flex;
@@ -560,8 +568,33 @@ body.dark-theme .avatar-uploader-circle:hover {
   transform: translate(-50%, -50%);
   border-radius: 50%;
   border: 2px solid white;
-  box-shadow: 0 0 0 9999px rgba(10, 15, 30, 0.7);
+  box-shadow: 0 0 0 9999px rgba(10, 15, 30, 0.75), 0 0 15px rgba(255, 255, 255, 0.25);
   pointer-events: none;
+}
+.cropper-crop-box::before,
+.cropper-crop-box::after {
+  content: "";
+  position: absolute;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+}
+/* Horizontal grid lines */
+.cropper-crop-box::before {
+  top: 33.33%;
+  bottom: 33.33%;
+  left: 0;
+  right: 0;
+  border-left: none;
+  border-right: none;
+}
+/* Vertical grid lines */
+.cropper-crop-box::after {
+  left: 33.33%;
+  right: 33.33%;
+  top: 0;
+  bottom: 0;
+  border-top: none;
+  border-bottom: none;
 }
 .cropper-controls {
   width: 100%;
@@ -577,6 +610,15 @@ body.dark-theme .avatar-uploader-circle:hover {
   color: var(--text-color);
   font-size: 0.9rem;
   justify-content: center;
+}
+.zoom-control-group i {
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: all 0.25s ease;
+}
+.zoom-control-group i:hover {
+  transform: scale(1.25);
+  color: rgb(var(--primary-rgb));
 }
 .zoom-slider {
   width: 220px;

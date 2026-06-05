@@ -297,6 +297,17 @@ export class AppComponent implements OnInit {
     this.croppingMode = null;
   }
 
+  public adjustZoom(amount: number): void {
+    const newZoom = this.zoom + amount;
+    this.zoom = Math.max(this.minZoom, Math.min(this.maxZoom, newZoom));
+  }
+
+  public onWheel(event: WheelEvent): void {
+    event.preventDefault();
+    const amount = event.deltaY < 0 ? 0.05 : -0.05;
+    this.adjustZoom(amount);
+  }
+
   // Crop image using canvas drawImage
   public applyCrop(img: HTMLImageElement, container: HTMLDivElement): void {
     if (!img || !container) return;

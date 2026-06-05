@@ -30,20 +30,20 @@
         </li>
       </ul>
       
-      <!-- Theme Switcher and Search -->
-      <div class="d-flex align-items-center ml-auto">
+      <!-- Theme Switcher and Search controls container -->
+      <div class="navbar-controls-wrapper ml-auto">
         <!-- User Info Display -->
-        <div class="navbar-text mr-3 d-flex align-items-center" style="color: var(--text-color); font-weight: 600; font-size: 0.9rem;">
+        <div class="navbar-text d-flex align-items-center" style="color: var(--text-color); font-weight: 600; font-size: 0.9rem;">
           <i class="fa fa-user-circle mr-2" style="color: rgb(var(--primary-rgb)); font-size: 1.1rem;"></i>
           <span>{{ getUsername() }} ({{ getRoleName() }})</span>
         </div>
 
-        <label class="switch mb-0 mr-4">
+        <label class="switch mb-0">
           <input type="checkbox" (change)="toggleTheme($event)" [checked]="isDarkTheme" />
           <span class="slider"></span>
         </label>
         
-        <form class="form-inline my-2 my-lg-0 mr-2">
+        <form class="form-inline my-2 my-lg-0">
           <div class="search-group">
             <input
               class="search-input"

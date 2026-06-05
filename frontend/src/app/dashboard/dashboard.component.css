@@ -209,3 +209,11 @@
   border-color: rgb(var(--primary-rgb));
   box-shadow: 0 0 8px rgba(var(--primary-rgb), 0.15);
 }
+
+/* Navbar Controls Wrapper */
+.navbar-controls-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+

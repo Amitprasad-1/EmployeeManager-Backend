@@ -30,6 +30,7 @@
   width: 64px;
   height: 64px;
   object-fit: contain;
+  border-radius: 50%; /* Make the logo image circular to fit the emblem shape */
 }
 .app-title {
   font-size: 2rem;
@@ -100,6 +101,9 @@ body.dark-theme .nav-tabs .nav-link.active {
   display: flex;
   align-items: center;
 }
+.input-icon-wrapper .form-control {
+  padding-left: 2.8rem !important; /* Fix placeholder/input text overlapping the icon */
+}
 .input-icon {
   position: absolute;
   left: 16px;
@@ -122,6 +126,18 @@ body.dark-theme .input-icon-wrapper:focus-within .input-icon {
   border-radius: 16px;
   border: 1px solid var(--card-border) !important;
 }
+.credentials-helper code {
+  background: rgba(var(--primary-rgb), 0.08);
+  color: rgb(var(--primary-rgb)) !important;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-family: monospace;
+}
+body.dark-theme .credentials-helper code {
+  background: rgba(var(--accent-rgb), 0.15);
+  color: rgb(var(--accent-rgb)) !important;
+}
 
 /* Top bar controls (for theme toggler) */
 .top-bar-controls {
@@ -129,3 +145,4 @@ body.dark-theme .input-icon-wrapper:focus-within .input-icon {
   top: 24px;
   right: 24px;
 }
+

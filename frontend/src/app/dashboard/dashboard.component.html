@@ -99,14 +99,14 @@
       </div>
     </div>
 
-    <!-- Stat 3: Active Accounts -->
+    <!-- Stat 3: Active Members -->
     <div class="card glass stats-card">
       <div class="stats-icon-wrapper">
         <i class="fa fa-check-circle"></i>
       </div>
       <div class="stats-info">
         <span class="stats-num">{{ activeContractsCount }}</span>
-        <span class="stats-lbl">Active Accounts</span>
+        <span class="stats-lbl">Active Members</span>
       </div>
     </div>
   </div>
@@ -126,7 +126,7 @@
 
       <!-- Status Filter -->
       <div class="filter-item">
-        <label class="filter-label mb-0 mr-2"><i class="fa fa-circle mr-1"></i>Status:</label>
+        <label class="filter-label mb-0 mr-2"><i class="fa fa-circle mr-1 status-filter-dot" [ngClass]="filterStatus.toLowerCase().replace(' ', '-')"></i>Status:</label>
         <select class="filter-select" [(ngModel)]="filterStatus" (change)="applyFilters()">
           <option value="All">All Statuses</option>
           <option value="Active">Active</option>

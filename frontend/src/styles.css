@@ -428,6 +428,15 @@ body.dark-theme .btn-add-glass:hover {
   background: rgba(16, 185, 129, 0.08) !important;
   border: 1px solid rgba(16, 185, 129, 0.25) !important;
   color: #10b981 !important;
+  border-radius: 20px !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  padding: 0.45rem 1.1rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.05) !important;
 }
 .btn-export-glass:hover {
   background: #10b981 !important;
@@ -438,6 +447,7 @@ body.dark-theme .btn-add-glass:hover {
 body.dark-theme .btn-export-glass {
   background: rgba(16, 185, 129, 0.15) !important;
   border-color: rgba(16, 185, 129, 0.3) !important;
+  color: #10b981 !important;
 }
 body.dark-theme .btn-export-glass:hover {
   background: #10b981 !important;

@@ -14,8 +14,16 @@
 }
 .employee-card:hover {
   transform: translateY(-10px) scale(1.03) rotate(0.5deg);
-  border-color: rgba(var(--primary-rgb), 0.3) !important;
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.12), 0 0 25px rgba(var(--primary-rgb), 0.15);
+  border-color: rgba(var(--primary-rgb), 0.7) !important;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.12), 
+              0 0 20px rgba(var(--primary-rgb), 0.35), 
+              0 0 40px rgba(var(--primary-rgb), 0.15);
+}
+body.dark-theme .employee-card:hover {
+  border-color: rgba(var(--accent-rgb), 0.8) !important;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 
+              0 0 20px rgba(var(--accent-rgb), 0.45), 
+              0 0 40px rgba(var(--accent-rgb), 0.2) !important;
 }
 
 /* Gradient Banner Background */
@@ -219,5 +227,26 @@
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+/* Status Filter Indicator Dot Styles */
+.status-filter-dot {
+  transition: color 0.3s ease;
+  color: var(--text-muted);
+}
+.status-filter-dot.all {
+  color: rgb(var(--primary-rgb));
+}
+body.dark-theme .status-filter-dot.all {
+  color: rgb(var(--accent-rgb));
+}
+.status-filter-dot.active {
+  color: #10b981;
+}
+.status-filter-dot.on-leave {
+  color: #f59e0b;
+}
+.status-filter-dot.inactive {
+  color: #ef4444;
 }
 

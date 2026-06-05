@@ -133,6 +133,7 @@
               <img [src]="employee?.imageUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&h=150&q=80'" 
                 alt="Profile" 
                 class="profile-avatar" />
+              <span class="status-indicator" [ngClass]="(employee?.status || 'Active').toLowerCase().replace(' ', '-')"></span>
             </div>
             
             <!-- Profile Info Details -->
@@ -144,12 +145,20 @@
             <!-- Contact info list -->
             <div class="contact-details">
               <div class="detail-item text-break">
+                <i class="fa fa-briefcase detail-icon"></i>
+                <span class="text-muted">{{ employee?.department || 'General' }} <span style="font-size: 0.8rem; opacity: 0.75;">({{ employee?.contractType || 'Full-time' }})</span></span>
+              </div>
+              <div class="detail-item text-break">
                 <i class="fa fa-envelope detail-icon"></i>
                 <span class="text-muted">{{ employee?.email }}</span>
               </div>
               <div class="detail-item">
                 <i class="fa fa-phone detail-icon"></i>
                 <span class="text-muted">{{ employee?.phone }}</span>
+              </div>
+              <div class="detail-item" *ngIf="employee?.dateOfJoining">
+                <i class="fa fa-calendar detail-icon"></i>
+                <span class="text-muted">Joined: {{ employee?.dateOfJoining }}</span>
               </div>
             </div>
 
@@ -267,6 +276,44 @@
                   <i class="fa fa-exclamation-circle"></i> Phone Number is required.
                 </div>
               </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="department">Department</label>
+                    <input type="text" class="form-control" id="department" name="department" [(ngModel)]="newEmployee.department" placeholder="e.g. Engineering" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="dateOfJoining">Date of Joining</label>
+                    <input type="date" class="form-control" id="dateOfJoining" name="dateOfJoining" [(ngModel)]="newEmployee.dateOfJoining" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="contractType">Contract Type</label>
+                    <select class="form-control" id="contractType" name="contractType" [(ngModel)]="newEmployee.contractType" required>
+                      <option value="Full-time">Full-time</option>
+                      <option value="Part-time">Part-time</option>
+                      <option value="Contractor">Contractor</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="status">Status</label>
+                    <select class="form-control" id="status" name="status" [(ngModel)]="newEmployee.status" required>
+                      <option value="Active">Active</option>
+                      <option value="On Leave">On Leave</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" id="add-employee-close" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -375,6 +422,44 @@
                 <input type="text" class="form-control" id="editPhone" name="phone" [(ngModel)]="editEmployee.phone" #phoneEdit="ngModel" required>
                 <div *ngIf="phoneEdit.invalid && (phoneEdit.dirty || phoneEdit.touched)" class="validation-error">
                   <i class="fa fa-exclamation-circle"></i> Phone Number is required.
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="editDepartment">Department</label>
+                    <input type="text" class="form-control" id="editDepartment" name="department" [(ngModel)]="editEmployee.department" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="editDateOfJoining">Date of Joining</label>
+                    <input type="date" class="form-control" id="editDateOfJoining" name="dateOfJoining" [(ngModel)]="editEmployee.dateOfJoining" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="editContractType">Contract Type</label>
+                    <select class="form-control" id="editContractType" name="contractType" [(ngModel)]="editEmployee.contractType" required>
+                      <option value="Full-time">Full-time</option>
+                      <option value="Part-time">Part-time</option>
+                      <option value="Contractor">Contractor</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="editStatus">Status</label>
+                    <select class="form-control" id="editStatus" name="status" [(ngModel)]="editEmployee.status" required>
+                      <option value="Active">Active</option>
+                      <option value="On Leave">On Leave</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>

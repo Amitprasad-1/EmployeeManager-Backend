@@ -16,6 +16,10 @@ public class Employee implements Serializable   {
     private String imageUrl;
     @Column(nullable = false,updatable = false)
     private String employeeCode;
+    private String department;
+    private String status;
+    private String dateOfJoining;
+    private String contractType;
 
     public Employee(){}
     public Employee(String name,String email,String jobTitle,String phone,String imageUrl,String employeeCode){
@@ -87,6 +91,34 @@ public class Employee implements Serializable   {
         this.employeeCode=employeeCode;
     }
 
+    public String getDepartment() {
+        return department;
+    }
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getDateOfJoining() {
+        return dateOfJoining;
+    }
+    public void setDateOfJoining(String dateOfJoining) {
+        this.dateOfJoining = dateOfJoining;
+    }
+
+    public String getContractType() {
+        return contractType;
+    }
+    public void setContractType(String contractType) {
+        this.contractType = contractType;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
@@ -96,7 +128,10 @@ public class Employee implements Serializable   {
                 ", jobTitle='" + jobTitle + '\'' +
                 ", phone='" + phone + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
+                ", department='" + department + '\'' +
+                ", status='" + status + '\'' +
+                ", dateOfJoining='" + dateOfJoining + '\'' +
+                ", contractType='" + contractType + '\'' +
                 '}';
-
     }
 }

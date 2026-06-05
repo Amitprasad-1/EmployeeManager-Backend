@@ -5,4 +5,8 @@ export interface Employee {
   jobTitle: string;
   phone: string;
   imageUrl: string;
+  department: string;
+  status: string;
+  dateOfJoining: string;
+  contractType: string;
 }

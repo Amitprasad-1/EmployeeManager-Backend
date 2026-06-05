@@ -195,7 +195,12 @@ export class AppComponent implements OnInit {
     if (mode === 'add') {
       this.cancelCrop();
       this.showUrlInputAdd = false;
-      this.newEmployee = {} as Employee;
+      this.newEmployee = {
+        status: 'Active',
+        contractType: 'Full-time',
+        department: 'Engineering',
+        dateOfJoining: new Date().toISOString().slice(0, 10)
+      } as Employee;
       button.setAttribute('data-target', '#addEmployeeModal');
     } else if (mode === 'edit') {
       this.cancelCrop();

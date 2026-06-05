@@ -52,6 +52,30 @@
   box-shadow: 0 8px 20px rgba(var(--primary-rgb), 0.2);
 }
 
+.status-indicator {
+  position: absolute;
+  bottom: 0px;
+  right: calc(50% - 38px);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px solid var(--card-bg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, border-color 0.4s ease;
+}
+.status-indicator.active {
+  background-color: #10b981; /* Green */
+}
+.status-indicator.on-leave {
+  background-color: #f59e0b; /* Yellow/Orange */
+}
+.status-indicator.inactive {
+  background-color: #ef4444; /* Red */
+}
+.employee-card:hover .status-indicator {
+  border-color: rgb(var(--primary-rgb));
+}
+
 /* Profile details */
 .profile-info {
   text-align: center;

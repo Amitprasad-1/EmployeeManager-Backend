@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgForm, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -16,6 +16,8 @@ import { AuthService } from '../auth.service';
   encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit {
+  @ViewChild('searchInput') searchInput!: ElementRef;
+
   public employees: Employee[] = [];
   private allEmployees: Employee[] = [];
   public newEmployee: Employee = {} as Employee;
@@ -59,6 +61,14 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService,
     private router: Router
   ) {}
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      this.searchInput?.nativeElement?.focus();
+    }
+  }
 
   ngOnInit(): void {
     this.getEmployees();

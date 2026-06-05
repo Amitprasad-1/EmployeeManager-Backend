@@ -5,28 +5,33 @@
 </div>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg sticky-top">
+<nav class="navbar navbar-expand-lg sticky-top main-navbar glass">
   <div class="container-fluid align-items-center">
     <!-- Brand -->
-    <a class="navbar-brand d-flex align-items-center" href="#">
-      <i class="fa fa-users mr-2"></i>Employee Manager
+    <a class="d-flex align-items-center text-decoration-none" href="#">
+      <div class="brand-logo-wrapper">
+        <i class="fa fa-users"></i>
+      </div>
+      <span class="brand-text">Employee Manager</span>
     </a>
     
     <!-- Mobile Hamburger Toggler -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
-      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navbarContent"
+      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation" style="outline: none; box-shadow: none;">
+      <i class="fa fa-bars" style="color: var(--text-color); font-size: 1.25rem;"></i>
     </button>
     
     <!-- Collapsible Wrapper -->
     <div class="collapse navbar-collapse align-items-center" id="navbarContent">
       
       <!-- Center section: Search bar -->
-      <div class="navbar-search-container mx-auto">
-        <form class="form-inline">
-          <div class="search-group">
+      <div class="navbar-search-wrapper mx-auto">
+        <form class="form-inline w-100" (submit)="$event.preventDefault()">
+          <div class="modern-search-group">
+            <i class="fa fa-search search-icon-left"></i>
             <input
-              class="search-input"
+              #searchInput
+              class="modern-search-input"
               type="search"
               name="search"
               [(ngModel)]="searchKey"
@@ -34,48 +39,50 @@
               placeholder="Search employees..."
               aria-label="Search"
             />
-            <button class="btn-search-round" type="button" (click)="searchEmployees(searchKey)">
-              <i class="fa fa-search"></i>
-            </button>
+            <span class="search-shortcut">Ctrl K</span>
           </div>
         </form>
       </div>
       
       <!-- Right section: Controls & Actions -->
-      <div class="navbar-controls-wrapper ml-auto d-flex align-items-center gap-3">
+      <div class="navbar-right-group ml-auto">
         <!-- Actions (Add Employee & Export CSV) -->
-        <div class="navbar-actions d-flex align-items-center gap-2">
+        <div class="navbar-actions-group">
           <!-- Only Admins can Add Employees -->
-          <button class="btn btn-add-glass" (click)="onOpenModal(null, 'add')" *ngIf="isAdmin()">
+          <button class="btn btn-add-modern" (click)="onOpenModal(null, 'add')" *ngIf="isAdmin()">
             <i class="fa fa-plus-circle"></i>Add Employee
           </button>
-          <button class="btn btn-export-glass" (click)="exportToCSV()">
+          <button class="btn btn-export-modern" (click)="exportToCSV()">
             <i class="fa fa-download"></i>Export CSV
           </button>
         </div>
 
-        <!-- Theme Switcher -->
-        <label class="switch mb-0">
-          <input type="checkbox" (change)="toggleTheme($event)" [checked]="isDarkTheme" />
-          <span class="slider"></span>
-        </label>
-        
-        <span class="navbar-divider"></span>
+        <div class="nav-v-divider"></div>
 
-        <!-- User Profile Chip (Replaces duplicate user User) -->
-        <div class="user-profile-chip d-flex align-items-center" *ngIf="!isGuest()">
-          <div class="user-avatar-circle">
-            <i class="fa fa-user"></i>
+        <!-- Theme Switcher -->
+        <div class="theme-toggle-wrapper">
+          <label class="switch mb-0">
+            <input type="checkbox" (change)="toggleTheme($event)" [checked]="isDarkTheme" />
+            <span class="slider"></span>
+          </label>
+        </div>
+        
+        <div class="nav-v-divider"></div>
+
+        <!-- User Profile Chip -->
+        <div class="modern-profile-chip" *ngIf="!isGuest()">
+          <div class="user-avatar-gradient">
+            {{ getUsername() ? getUsername().charAt(0).toUpperCase() : 'U' }}
           </div>
-          <div class="user-meta d-flex flex-column text-left">
-            <span class="user-name">{{ getUsername() }}</span>
-            <span class="user-role-badge" [ngClass]="getRoleName().toLowerCase()">{{ getRoleName() }}</span>
+          <div class="user-profile-info text-left">
+            <span class="profile-name">{{ getUsername() }}</span>
+            <span class="profile-role-badge" [ngClass]="getRoleName().toLowerCase()">{{ getRoleName() }}</span>
           </div>
         </div>
 
         <!-- Auth Button -->
-        <button class="btn btn-secondary btn-sm" (click)="logout()" *ngIf="!isGuest()">
-          <i class="fa fa-sign-out mr-1"></i>Logout
+        <button class="btn-logout-modern" (click)="logout()" *ngIf="!isGuest()" title="Logout">
+          <i class="fa fa-sign-out"></i>
         </button>
         <button class="btn btn-primary btn-sm" (click)="goToLogin()" *ngIf="isGuest()">
           <i class="fa fa-sign-in mr-1"></i>Log In

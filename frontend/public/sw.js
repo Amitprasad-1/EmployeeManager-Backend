@@ -1,4 +1,4 @@
-const CACHE_NAME = 'emp-manager-cache-v2';
+const CACHE_NAME = 'emp-manager-cache-v3';
 const ASSETS = [
   '/',
   '/index.html',
@@ -33,12 +33,24 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Return cached index.html for all navigation requests (SPA Routing)
+  // Network-First strategy for navigation requests (SPA Routing)
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      caches.match('/index.html').then((cachedResponse) => {
-        return cachedResponse || fetch(event.request);
-      })
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put('/index.html', responseClone);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          return caches.match('/index.html').then((cachedResponse) => {
+            return cachedResponse || fetch(event.request);
+          });
+        })
     );
     return;
   }
@@ -46,9 +58,18 @@ self.addEventListener('fetch', (event) => {
   // Only handle standard HTTP/HTTPS requests
   if (!event.request.url.startsWith('http')) return;
   
+  // Cache-First with network fallback for other resources
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      return cachedResponse || fetch(event.request);
+      return cachedResponse || fetch(event.request).then((networkResponse) => {
+        if (networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+        }
+        return networkResponse;
+      });
     })
   );
 });

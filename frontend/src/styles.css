@@ -546,9 +546,11 @@ body.dark-theme .avatar-uploader-circle:hover {
 }
 .cropper-image {
   position: absolute;
+  top: 0;
+  left: 0;
   max-width: none;
   max-height: none;
-  transform-origin: center center;
+  transform-origin: 0 0;
   will-change: transform;
 }
 .cropper-crop-box {

@@ -230,37 +230,60 @@ export class AppComponent implements OnInit {
 
   // Centering & scaling image when loaded
   public onImageLoaded(img: HTMLImageElement, container: HTMLDivElement): void {
-    const containerWidth = container.clientWidth;
-    const containerHeight = container.clientHeight;
-    const imgWidth = img.naturalWidth;
-    const imgHeight = img.naturalHeight;
+    if (!img || !container) return;
+    
+    // setTimeout avoids layout race conditions during view initialization
+    setTimeout(() => {
+      const containerWidth = container.clientWidth || 350;
+      const containerHeight = container.clientHeight || 280;
+      const imgWidth = img.naturalWidth;
+      const imgHeight = img.naturalHeight;
 
-    // Minimum zoom to cover the 180px crop box
-    const scaleX = 180 / imgWidth;
-    const scaleY = 180 / imgHeight;
-    this.minZoom = Math.max(scaleX, scaleY);
-    this.maxZoom = this.minZoom * 4;
-    this.zoom = this.minZoom;
+      // Minimum zoom to cover the 180px crop box
+      const scaleX = 180 / imgWidth;
+      const scaleY = 180 / imgHeight;
+      this.minZoom = Math.max(scaleX, scaleY);
+      this.maxZoom = this.minZoom * 4;
+      this.zoom = this.minZoom;
 
-    // Initial center position
-    this.panX = (containerWidth - imgWidth) / 2;
-    this.panY = (containerHeight - imgHeight) / 2;
+      // Initial center position (centered relative to 0 0 origin)
+      this.panX = (containerWidth - imgWidth * this.zoom) / 2;
+      this.panY = (containerHeight - imgHeight * this.zoom) / 2;
+    }, 50);
   }
 
   // Drag handlers
   public startDrag(event: MouseEvent | TouchEvent): void {
     this.isDragging = true;
-    const clientX = event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
-    const clientY = event instanceof MouseEvent ? event.clientY : event.touches[0].clientY;
+    let clientX = 0;
+    let clientY = 0;
+    if (event instanceof MouseEvent) {
+      clientX = event.clientX;
+      clientY = event.clientY;
+    } else if (event.touches && event.touches.length > 0) {
+      clientX = event.touches[0].clientX;
+      clientY = event.touches[0].clientY;
+    } else {
+      return;
+    }
     this.startX = clientX - this.panX;
     this.startY = clientY - this.panY;
   }
 
   public drag(event: MouseEvent | TouchEvent): void {
     if (!this.isDragging) return;
+    let clientX = 0;
+    let clientY = 0;
+    if (event instanceof MouseEvent) {
+      clientX = event.clientX;
+      clientY = event.clientY;
+    } else if (event.touches && event.touches.length > 0) {
+      clientX = event.touches[0].clientX;
+      clientY = event.touches[0].clientY;
+    } else {
+      return;
+    }
     event.preventDefault();
-    const clientX = event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
-    const clientY = event instanceof MouseEvent ? event.clientY : event.touches[0].clientY;
     this.panX = clientX - this.startX;
     this.panY = clientY - this.startY;
   }
@@ -276,13 +299,16 @@ export class AppComponent implements OnInit {
 
   // Crop image using canvas drawImage
   public applyCrop(img: HTMLImageElement, container: HTMLDivElement): void {
-    const containerRect = container.getBoundingClientRect();
-    const imgRect = img.getBoundingClientRect();
+    if (!img || !container) return;
+    const containerWidth = container.clientWidth || 350;
+    const containerHeight = container.clientHeight || 280;
+    const imgWidth = img.naturalWidth;
+    const imgHeight = img.naturalHeight;
 
     const cropBoxWidth = 180;
     const cropBoxHeight = 180;
-    const cropBoxLeft = containerRect.left + (containerRect.width - cropBoxWidth) / 2;
-    const cropBoxTop = containerRect.top + (containerRect.height - cropBoxHeight) / 2;
+    const cropBoxLeft = (containerWidth - cropBoxWidth) / 2;
+    const cropBoxTop = (containerHeight - cropBoxHeight) / 2;
 
     const canvas = document.createElement('canvas');
     canvas.width = 180;
@@ -294,15 +320,15 @@ export class AppComponent implements OnInit {
       ctx.fillRect(0, 0, 180, 180);
 
       // Calculate relative drawing offset from crop box top-left
-      const drawX = imgRect.left - cropBoxLeft;
-      const drawY = imgRect.top - cropBoxTop;
+      const drawX = this.panX - cropBoxLeft;
+      const drawY = this.panY - cropBoxTop;
 
       ctx.drawImage(
         img,
         drawX,
         drawY,
-        imgRect.width,
-        imgRect.height
+        imgWidth * this.zoom,
+        imgHeight * this.zoom
       );
       
       const croppedBase64 = canvas.toDataURL('image/jpeg', 0.85);
